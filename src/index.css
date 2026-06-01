@@ -171,6 +171,127 @@ a {
   border-color: #e5e7eb;
 }
 
+.filter-card {
+  border-color: #e5e7eb;
+}
+
+.film-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2px 14px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.film-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.film-card {
+  overflow: hidden;
+  border-color: #e5e7eb;
+}
+
+.film-card .ant-card-body {
+  min-height: 224px;
+}
+
+.film-card .ant-card-actions {
+  background: #fbfdff;
+}
+
+.film-card-meta {
+  width: 100%;
+}
+
+.film-card h3.ant-typography {
+  margin: 0 0 8px;
+  font-size: 1.12rem;
+  line-height: 1.25;
+}
+
+.film-poster {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  background: #111827;
+}
+
+.film-poster .ant-image-img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.film-poster-empty {
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  font-size: 2rem;
+  background:
+    linear-gradient(135deg, rgba(37, 99, 235, 0.78), rgba(17, 24, 39, 0.96)),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.14) 0 1px, transparent 1px 12px);
+}
+
+.film-detail-card {
+  overflow: hidden;
+  border-color: #e5e7eb;
+}
+
+.film-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 360px) minmax(0, 1fr);
+  gap: clamp(18px, 4vw, 34px);
+  align-items: start;
+}
+
+.detail-poster {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #111827;
+}
+
+.detail-poster .ant-image-img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.detail-poster-empty {
+  display: grid;
+  place-items: center;
+  min-height: 420px;
+  color: #ffffff;
+  font-size: 3rem;
+  background:
+    linear-gradient(135deg, rgba(37, 99, 235, 0.78), rgba(17, 24, 39, 0.96)),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.14) 0 1px, transparent 1px 14px);
+}
+
+.film-detail-copy {
+  min-width: 0;
+}
+
+.film-detail-copy h1.ant-typography {
+  margin: 0;
+}
+
+.film-plot {
+  max-width: 760px;
+  color: #374151;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
 @media (max-width: 900px) {
   .app-header {
     align-items: stretch;
@@ -184,7 +305,10 @@ a {
   }
 
   .summary-grid,
-  .status-strip {
+  .status-strip,
+  .film-grid,
+  .film-filter-grid,
+  .film-detail-layout {
     grid-template-columns: 1fr;
   }
 
@@ -205,5 +329,9 @@ a {
 
   .app-header {
     padding-inline: 12px;
+  }
+
+  .film-card .ant-card-body {
+    min-height: auto;
   }
 }

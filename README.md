@@ -2,7 +2,7 @@
 
 CinemaVault SPA is the React TypeScript frontend repository for the Coventry University 6003CEM Web API Development CW2 project.
 
-This frontend repository contains the React SPA for CinemaVault. Phase 8.1 adds the authentication foundation: API client helpers, login/register forms, JWT auth state, role-aware navigation, and protected routes.
+This frontend repository contains the React SPA for CinemaVault. Phase 8.2 adds public film catalogue browsing and film detail pages against the backend Films API.
 
 ## Tech Stack
 
@@ -63,6 +63,14 @@ Password: AdminPassword123!
 User
 Email: member@cinemavault.local
 Password: UserPassword123!
+```
+
+For public film browsing, run the backend migrations and seed script so the catalogue has demo films:
+
+```bash
+cd ../cinemavault-api
+npm run prisma:migrate
+npm run prisma:seed
 ```
 
 ## Install
@@ -137,7 +145,32 @@ Current auth behaviour:
 - Navigation shows current username, role, and Logout when logged in.
 - Admin navigation appears only for users with role `ADMIN`.
 
-## Phase 8.1 Scope
+## Public Film Browsing
+
+The public film pages use these backend endpoints:
+
+```text
+GET /api/v1/films
+GET /api/v1/films/:id
+```
+
+`/films` supports backend query parameters through the UI:
+
+- `title`
+- `genre`
+- `year`
+- `rating`
+- `isLive`
+- `sortBy`
+- `order`
+- `page`
+- `limit`
+
+`/films/:id` shows poster, title, genre, year, rating, director, cast, plot, runtime, language, country, and IMDb ID where available.
+
+Film browsing remains public and does not require login.
+
+## Phase 8.2 Scope
 
 Implemented:
 
@@ -156,11 +189,12 @@ Implemented:
 - Login and register forms wired to backend endpoints
 - Protected route and admin route guards
 - Role-aware navigation
+- Film API service
+- Public film catalogue with loading, error, empty, filtering, sorting, and pagination states
+- Public film detail page with loading, error, and not-found states
 
 Not implemented yet:
 
-- Film API fetching
-- Film detail data loading
 - Admin film CRUD
 - Favourites, watchlist, watched records
 - Messages

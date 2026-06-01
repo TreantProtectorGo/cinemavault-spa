@@ -37,3 +37,49 @@ export type AuthContextValue = {
   isAuthenticated: boolean;
   isAdmin: boolean;
 };
+
+export type HateoasLinks = Record<string, string>;
+
+export type Film = {
+  id: string;
+  title: string;
+  genre: string | null;
+  year: number | null;
+  rating: number | null;
+  director: string | null;
+  cast: string | null;
+  plot: string | null;
+  posterUrl: string | null;
+  runtime: number | null;
+  language: string | null;
+  country: string | null;
+  imdbId: string | null;
+  omdbMetadataJson: string | null;
+  isLive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  links: HateoasLinks;
+};
+
+export type FilmQueryParams = {
+  title?: string;
+  genre?: string;
+  year?: number;
+  rating?: number;
+  isLive?: boolean;
+  sortBy?: "title" | "genre" | "year" | "rating" | "createdAt" | "updatedAt";
+  order?: "asc" | "desc";
+  page?: number;
+  limit?: number;
+};
+
+export type FilmListResponse = {
+  data: Film[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+  links: HateoasLinks;
+};
