@@ -143,6 +143,34 @@ a {
   font-size: 0.9rem;
 }
 
+.auth-cluster {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 220px;
+  padding: 4px 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f9fafb;
+}
+
+.user-pill .ant-typography {
+  overflow: hidden;
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.auth-card {
+  width: min(100%, 460px);
+  border-color: #e5e7eb;
+}
+
 @media (max-width: 900px) {
   .app-header {
     align-items: stretch;
@@ -158,6 +186,10 @@ a {
   .summary-grid,
   .status-strip {
     grid-template-columns: 1fr;
+  }
+
+  .auth-cluster {
+    justify-content: flex-start;
   }
 }
 

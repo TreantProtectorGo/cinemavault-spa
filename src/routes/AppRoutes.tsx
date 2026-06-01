@@ -7,6 +7,7 @@ import { HomePage } from "../pages/HomePage";
 import { LoginPage } from "../pages/LoginPage";
 import { NotFoundPage } from "../pages/NotFoundPage";
 import { RegisterPage } from "../pages/RegisterPage";
+import { AdminRoute } from "./ProtectedRoute";
 
 export function AppRoutes() {
   return (
@@ -17,7 +18,14 @@ export function AppRoutes() {
         <Route path="/films/:id" element={<FilmDetailPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/admin" element={<AdminDashboardPage />} />
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminDashboardPage />
+            </AdminRoute>
+          }
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </AppLayout>

@@ -12,6 +12,7 @@ export type AppRouteMeta = {
   label: string;
   icon: ReactNode;
   showInNav: boolean;
+  requiresAdmin?: boolean;
 };
 
 export const appRoutes: AppRouteMeta[] = [
@@ -44,5 +45,6 @@ export const appRoutes: AppRouteMeta[] = [
     label: "Admin",
     icon: <DashboardOutlined />,
     showInNav: true,
+    requiresAdmin: true,
   },
 ];
