@@ -83,3 +83,28 @@ export type FilmListResponse = {
   };
   links: HateoasLinks;
 };
+
+export type FilmCreateRequest = {
+  title: string;
+  genre?: string;
+  year?: number;
+  rating?: number;
+  director?: string;
+  cast?: string;
+  plot?: string;
+  posterUrl?: string;
+  runtime?: number;
+  language?: string;
+  country?: string;
+  imdbId?: string;
+  isLive?: boolean;
+};
+
+export type FilmUpdateRequest = Partial<FilmCreateRequest>;
+
+export type OmdbImportRequest = {
+  imdbId?: string;
+  title?: string;
+};
+
+export type OmdbImportResponse = Film;

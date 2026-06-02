@@ -2,7 +2,7 @@
 
 CinemaVault SPA is the React TypeScript frontend repository for the Coventry University 6003CEM Web API Development CW2 project.
 
-This frontend repository contains the React SPA for CinemaVault. Phase 8.2 adds public film catalogue browsing and film detail pages against the backend Films API.
+This frontend repository contains the React SPA for CinemaVault. Phase 8.3 adds admin film management and OMDB import UI against the backend Films API.
 
 ## Tech Stack
 
@@ -112,6 +112,7 @@ src/
   api/
     auth.ts
     client.ts
+    films.ts
   components/
   context/
   hooks/
@@ -170,7 +171,35 @@ GET /api/v1/films/:id
 
 Film browsing remains public and does not require login.
 
-## Phase 8.2 Scope
+## Admin Film Management
+
+The admin dashboard uses these protected backend endpoints:
+
+```text
+GET    /api/v1/films
+POST   /api/v1/films
+PUT    /api/v1/films/:id
+DELETE /api/v1/films/:id
+POST   /api/v1/films/import-omdb
+```
+
+Current admin UI behaviour:
+
+- `/admin` is protected by `AdminRoute`.
+- Admin users can view live or archived films in a table.
+- Admin users can create films manually.
+- Admin users can edit existing films.
+- Admin users can archive films via delete action.
+- Admin users can import films from OMDB by IMDb ID or title.
+- Request failures show clean Ant Design messages.
+
+OMDB import requires the backend `.env` to include:
+
+```env
+OMDB_API_KEY=your-omdb-key
+```
+
+## Phase 8.3 Scope
 
 Implemented:
 
@@ -192,10 +221,11 @@ Implemented:
 - Film API service
 - Public film catalogue with loading, error, empty, filtering, sorting, and pagination states
 - Public film detail page with loading, error, and not-found states
+- Admin film table
+- Admin create/edit/delete film modals
+- Admin OMDB import modal
 
 Not implemented yet:
 
-- Admin film CRUD
 - Favourites, watchlist, watched records
 - Messages
-- OMDB import UI

@@ -292,6 +292,72 @@ a {
   line-height: 1.7;
 }
 
+.admin-heading {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+}
+
+.admin-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.admin-table-card {
+  border-color: #e5e7eb;
+}
+
+.admin-poster {
+  display: block;
+  width: 48px;
+  height: 66px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #111827;
+}
+
+.admin-poster .ant-image-img {
+  width: 48px;
+  height: 66px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.admin-poster-empty {
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  background:
+    linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(17, 24, 39, 0.96)),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.12) 0 1px, transparent 1px 8px);
+}
+
+.admin-film-title {
+  display: grid;
+  max-width: 320px;
+  min-width: 0;
+}
+
+.admin-film-title .ant-typography {
+  overflow: hidden;
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 14px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
 @media (max-width: 900px) {
   .app-header {
     align-items: stretch;
@@ -306,6 +372,9 @@ a {
 
   .summary-grid,
   .status-strip,
+  .admin-heading,
+  .admin-stat-grid,
+  .admin-form-grid,
   .film-grid,
   .film-filter-grid,
   .film-detail-layout {
