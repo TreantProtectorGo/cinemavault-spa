@@ -97,6 +97,9 @@ npm run build
 /             Home
 /films        Films
 /films/:id    Film Detail
+/favourites   Favourites, protected user route
+/watchlist    Watchlist, protected user route
+/watched      Watched records, protected user route
 /login        Login
 /register     Register
 /admin        Admin Dashboard, protected admin-only route
@@ -171,6 +174,8 @@ GET /api/v1/films/:id
 
 Film browsing remains public and does not require login.
 
+Logged-in users can use film detail actions to add or remove favourites, add or remove watchlist items, and mark films as watched with optional rating and notes.
+
 ## Admin Film Management
 
 The admin dashboard uses these protected backend endpoints:
@@ -199,6 +204,33 @@ OMDB import requires the backend `.env` to include:
 OMDB_API_KEY=your-omdb-key
 ```
 
+## User Tracking
+
+The user tracking pages require JWT login and use these backend endpoints:
+
+```text
+GET    /api/v1/favourites
+POST   /api/v1/favourites/:filmId
+DELETE /api/v1/favourites/:filmId
+
+GET    /api/v1/watchlist
+POST   /api/v1/watchlist/:filmId
+DELETE /api/v1/watchlist/:filmId
+
+GET    /api/v1/watched
+POST   /api/v1/watched/:filmId
+DELETE /api/v1/watched/:filmId
+```
+
+Current tracking UI behaviour:
+
+- `/favourites` lists the current user's favourite films.
+- `/watchlist` lists the current user's planned films.
+- `/watched` lists watched films with rating and notes where available.
+- Each tracking page supports remove actions with confirmation.
+- Film detail pages expose add/remove favourite, add/remove watchlist, and mark/update/remove watched actions when logged in.
+- Logged-out users see a login prompt instead of tracking actions.
+
 ## Phase 8.3 Scope
 
 Implemented:
@@ -224,8 +256,10 @@ Implemented:
 - Admin film table
 - Admin create/edit/delete film modals
 - Admin OMDB import modal
+- User tracking API service
+- Favourites, watchlist, and watched pages
+- Film detail tracking actions
 
 Not implemented yet:
 
-- Favourites, watchlist, watched records
 - Messages

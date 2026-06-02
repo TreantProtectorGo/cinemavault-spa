@@ -108,3 +108,47 @@ export type OmdbImportRequest = {
 };
 
 export type OmdbImportResponse = Film;
+
+export type Favourite = {
+  id: string;
+  userId: string;
+  filmId: string;
+  film: Film;
+  createdAt: string;
+  links: HateoasLinks;
+};
+
+export type WatchlistItem = {
+  id: string;
+  userId: string;
+  filmId: string;
+  status: string;
+  notes: string | null;
+  film: Film;
+  createdAt: string;
+  updatedAt: string;
+  links: HateoasLinks;
+};
+
+export type WatchedRecord = {
+  id: string;
+  userId: string;
+  filmId: string;
+  watchedAt: string;
+  rating: number | null;
+  notes: string | null;
+  film: Film;
+  createdAt: string;
+  updatedAt: string;
+  links: HateoasLinks;
+};
+
+export type WatchedCreateRequest = {
+  rating?: number;
+  notes?: string;
+};
+
+export type TrackingCollectionResponse<TRecord> = {
+  data: TRecord[];
+  links: HateoasLinks;
+};

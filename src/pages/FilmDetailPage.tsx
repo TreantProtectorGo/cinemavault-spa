@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeftOutlined,
+  CheckCircleOutlined,
+  HeartOutlined,
+  LoginOutlined,
   PictureOutlined,
-  VideoCameraOutlined,
+  PlaySquareOutlined,
 } from "@ant-design/icons";
 import {
   Alert,
@@ -16,10 +19,24 @@ import {
   Space,
   Tag,
   Typography,
+  message,
 } from "antd";
 import { getApiErrorMessage } from "../api/client";
 import { getFilmById } from "../api/films";
-import type { Film } from "../types";
+import {
+  addFavourite,
+  addWatchlistItem,
+  getFavourites,
+  getWatched,
+  getWatchlist,
+  markWatched,
+  removeFavourite,
+  removeWatched,
+  removeWatchlistItem,
+} from "../api/tracking";
+import { WatchedModal } from "../components/WatchedModal";
+import { useAuth } from "../hooks/useAuth";
+import type { Favourite, Film, WatchedCreateRequest, WatchedRecord, WatchlistItem } from "../types";
 
 function DetailPoster({ film }: { film: Film }) {
   if (!film.posterUrl) {
@@ -78,8 +95,16 @@ function metadataItems(film: Film) {
 
 export function FilmDetailPage() {
   const { id } = useParams();
+  const [messageApi, contextHolder] = message.useMessage();
+  const { isAuthenticated } = useAuth();
   const [film, setFilm] = useState<Film | null>(null);
+  const [favourite, setFavourite] = useState<Favourite | null>(null);
+  const [watchlistItem, setWatchlistItem] = useState<WatchlistItem | null>(null);
+  const [watchedRecord, setWatchedRecord] = useState<WatchedRecord | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isTrackingLoading, setIsTrackingLoading] = useState(false);
+  const [isTrackingSubmitting, setIsTrackingSubmitting] = useState(false);
+  const [isWatchedModalOpen, setIsWatchedModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -119,6 +144,134 @@ export function FilmDetailPage() {
       isMounted = false;
     };
   }, [id]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadTrackingState() {
+      if (!id || !isAuthenticated) {
+        setFavourite(null);
+        setWatchlistItem(null);
+        setWatchedRecord(null);
+        return;
+      }
+
+      setIsTrackingLoading(true);
+
+      try {
+        const [favourites, watchlist, watched] = await Promise.all([
+          getFavourites(),
+          getWatchlist(),
+          getWatched(),
+        ]);
+
+        if (isMounted) {
+          setFavourite(favourites.data.find((record) => record.filmId === id) ?? null);
+          setWatchlistItem(watchlist.data.find((record) => record.filmId === id) ?? null);
+          setWatchedRecord(watched.data.find((record) => record.filmId === id) ?? null);
+        }
+      } catch (error) {
+        if (isMounted) {
+          messageApi.error(getApiErrorMessage(error));
+        }
+      } finally {
+        if (isMounted) {
+          setIsTrackingLoading(false);
+        }
+      }
+    }
+
+    void loadTrackingState();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id, isAuthenticated, messageApi]);
+
+  async function handleFavouriteToggle() {
+    if (!id) {
+      return;
+    }
+
+    setIsTrackingSubmitting(true);
+
+    try {
+      if (favourite) {
+        await removeFavourite(id);
+        setFavourite(null);
+        messageApi.success("Removed from favourites.");
+      } else {
+        const result = await addFavourite(id);
+        setFavourite(result.record);
+        messageApi.success("Added to favourites.");
+      }
+    } catch (error) {
+      messageApi.error(getApiErrorMessage(error));
+    } finally {
+      setIsTrackingSubmitting(false);
+    }
+  }
+
+  async function handleWatchlistToggle() {
+    if (!id) {
+      return;
+    }
+
+    setIsTrackingSubmitting(true);
+
+    try {
+      if (watchlistItem) {
+        await removeWatchlistItem(id);
+        setWatchlistItem(null);
+        messageApi.success("Removed from watchlist.");
+      } else {
+        const result = await addWatchlistItem(id);
+        setWatchlistItem(result.record);
+        messageApi.success("Added to watchlist.");
+      }
+    } catch (error) {
+      messageApi.error(getApiErrorMessage(error));
+    } finally {
+      setIsTrackingSubmitting(false);
+    }
+  }
+
+  async function handleWatchedSubmit(values: WatchedCreateRequest) {
+    if (!id) {
+      return;
+    }
+
+    setIsTrackingSubmitting(true);
+
+    try {
+      const result = await markWatched(id, values);
+      setWatchedRecord(result.record);
+      setIsWatchedModalOpen(false);
+      messageApi.success(watchedRecord ? "Watched record updated." : "Marked as watched.");
+    } catch (error) {
+      messageApi.error(getApiErrorMessage(error));
+    } finally {
+      setIsTrackingSubmitting(false);
+    }
+  }
+
+  async function handleRemoveWatched() {
+    if (!id) {
+      return;
+    }
+
+    setIsTrackingSubmitting(true);
+
+    try {
+      await removeWatched(id);
+      setWatchedRecord(null);
+      messageApi.success("Watched record removed.");
+    } catch (error) {
+      messageApi.error(getApiErrorMessage(error));
+    } finally {
+      setIsTrackingSubmitting(false);
+    }
+  }
 
   if (isLoading) {
     return (
@@ -163,6 +316,7 @@ export function FilmDetailPage() {
 
   return (
     <section className="page-stack">
+      {contextHolder}
       <Link to="/films">
         <Button icon={<ArrowLeftOutlined />}>Back to films</Button>
       </Link>
@@ -204,16 +358,68 @@ export function FilmDetailPage() {
                 size="middle"
               />
 
-              <Space wrap>
-                <Button disabled icon={<VideoCameraOutlined />}>
-                  Add to watchlist later
-                </Button>
-                <Button disabled>Favourite later</Button>
-              </Space>
+              {isAuthenticated ? (
+                <Space wrap>
+                  <Button
+                    icon={<HeartOutlined />}
+                    loading={isTrackingLoading || isTrackingSubmitting}
+                    type={favourite ? "primary" : "default"}
+                    onClick={() => void handleFavouriteToggle()}
+                  >
+                    {favourite ? "Remove favourite" : "Add favourite"}
+                  </Button>
+                  <Button
+                    icon={<PlaySquareOutlined />}
+                    loading={isTrackingLoading || isTrackingSubmitting}
+                    type={watchlistItem ? "primary" : "default"}
+                    onClick={() => void handleWatchlistToggle()}
+                  >
+                    {watchlistItem ? "Remove watchlist" : "Add watchlist"}
+                  </Button>
+                  <Button
+                    icon={<CheckCircleOutlined />}
+                    loading={isTrackingLoading || isTrackingSubmitting}
+                    type={watchedRecord ? "primary" : "default"}
+                    onClick={() => setIsWatchedModalOpen(true)}
+                  >
+                    {watchedRecord ? "Update watched" : "Mark watched"}
+                  </Button>
+                  {watchedRecord ? (
+                    <Button
+                      danger
+                      loading={isTrackingSubmitting}
+                      onClick={() => void handleRemoveWatched()}
+                    >
+                      Remove watched
+                    </Button>
+                  ) : null}
+                </Space>
+              ) : (
+                <Alert
+                  showIcon
+                  type="info"
+                  message="Login required for tracking"
+                  description="Sign in to add favourites, build your watchlist, or mark films as watched."
+                  action={
+                    <Link to="/login">
+                      <Button icon={<LoginOutlined />} size="small" type="primary">
+                        Login
+                      </Button>
+                    </Link>
+                  }
+                />
+              )}
             </Space>
           </div>
         </div>
       </Card>
+
+      <WatchedModal
+        open={isWatchedModalOpen}
+        submitting={isTrackingSubmitting}
+        onCancel={() => setIsWatchedModalOpen(false)}
+        onSubmit={handleWatchedSubmit}
+      />
     </section>
   );
 }

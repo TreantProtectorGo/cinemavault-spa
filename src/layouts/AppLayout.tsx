@@ -32,6 +32,10 @@ export function AppLayout({ children }: AppLayoutProps) {
       return isAdmin;
     }
 
+    if (route.requiresAuth) {
+      return isAuthenticated;
+    }
+
     return true;
   });
 
