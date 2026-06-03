@@ -152,3 +152,43 @@ export type TrackingCollectionResponse<TRecord> = {
   data: TRecord[];
   links: HateoasLinks;
 };
+
+export type MessageStatus = "OPEN" | "REPLIED" | "DELETED";
+
+export type Message = {
+  id: string;
+  userId: string;
+  filmId: string;
+  adminId: string | null;
+  subject: string;
+  body: string;
+  replyBody: string | null;
+  status: MessageStatus;
+  repliedAt: string | null;
+  deletedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  sender: UserPublic | null;
+  admin: UserPublic | null;
+  film: Film;
+  links: HateoasLinks;
+};
+
+export type MessageCreateRequest = {
+  filmId: string;
+  subject: string;
+  body: string;
+};
+
+export type MessageReplyRequest = {
+  replyBody: string;
+};
+
+export type AdminMessageQuery = {
+  status?: MessageStatus;
+};
+
+export type MessageCollectionResponse = {
+  data: Message[];
+  links: HateoasLinks;
+};

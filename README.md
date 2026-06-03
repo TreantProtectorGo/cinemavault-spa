@@ -100,9 +100,11 @@ npm run build
 /favourites   Favourites, protected user route
 /watchlist    Watchlist, protected user route
 /watched      Watched records, protected user route
+/messages     User messages, protected user route
 /login        Login
 /register     Register
 /admin        Admin Dashboard, protected admin-only route
+/admin/messages Admin message inbox, protected admin-only route
 *             Not Found
 ```
 
@@ -231,7 +233,29 @@ Current tracking UI behaviour:
 - Film detail pages expose add/remove favourite, add/remove watchlist, and mark/update/remove watched actions when logged in.
 - Logged-out users see a login prompt instead of tracking actions.
 
-## Phase 8.3 Scope
+## Direct Messages
+
+The user messages page and admin message inbox use these protected backend endpoints:
+
+```text
+GET    /api/v1/messages
+POST   /api/v1/messages
+GET    /api/v1/admin/messages
+POST   /api/v1/admin/messages/:id/reply
+DELETE /api/v1/admin/messages/:id
+```
+
+Current message UI behaviour:
+
+- `/messages` lists the current user's messages and admin replies.
+- Users can send a message by film ID, subject, and body.
+- Film detail pages include a `Message admin about this film` action for logged-in users.
+- `/admin/messages` lists all messages for admin users.
+- Admin users can filter messages by status.
+- Admin users can reply to messages in a modal.
+- Admin users can soft-delete messages with confirmation.
+
+## Phase 8.5 Scope
 
 Implemented:
 
@@ -259,7 +283,11 @@ Implemented:
 - User tracking API service
 - Favourites, watchlist, and watched pages
 - Film detail tracking actions
+- Direct messages API service
+- User messages page
+- Film detail message-admin modal
+- Admin messages inbox with reply and delete workflow
 
 Not implemented yet:
 
-- Messages
+- Profile photo upload

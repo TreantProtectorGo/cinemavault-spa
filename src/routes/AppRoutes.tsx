@@ -1,11 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import { AppLayout } from "../layouts/AppLayout";
 import { AdminDashboardPage } from "../pages/AdminDashboardPage";
+import { AdminMessagesPage } from "../pages/AdminMessagesPage";
 import { FilmDetailPage } from "../pages/FilmDetailPage";
 import { FilmsPage } from "../pages/FilmsPage";
 import { FavouritesPage } from "../pages/FavouritesPage";
 import { HomePage } from "../pages/HomePage";
 import { LoginPage } from "../pages/LoginPage";
+import { MessagesPage } from "../pages/MessagesPage";
 import { NotFoundPage } from "../pages/NotFoundPage";
 import { RegisterPage } from "../pages/RegisterPage";
 import { WatchedPage } from "../pages/WatchedPage";
@@ -43,6 +45,14 @@ export function AppRoutes() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/messages"
+          element={
+            <ProtectedRoute>
+              <MessagesPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route
@@ -50,6 +60,14 @@ export function AppRoutes() {
           element={
             <AdminRoute>
               <AdminDashboardPage />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/messages"
+          element={
+            <AdminRoute>
+              <AdminMessagesPage />
             </AdminRoute>
           }
         />

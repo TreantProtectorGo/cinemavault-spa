@@ -5,6 +5,7 @@ import {
   CheckCircleOutlined,
   HeartOutlined,
   LoginOutlined,
+  MessageOutlined,
   PictureOutlined,
   PlaySquareOutlined,
 } from "@ant-design/icons";
@@ -23,6 +24,7 @@ import {
 } from "antd";
 import { getApiErrorMessage } from "../api/client";
 import { getFilmById } from "../api/films";
+import { sendMessage } from "../api/messages";
 import {
   addFavourite,
   addWatchlistItem,
@@ -34,9 +36,17 @@ import {
   removeWatched,
   removeWatchlistItem,
 } from "../api/tracking";
+import { SendMessageModal } from "../components/SendMessageModal";
 import { WatchedModal } from "../components/WatchedModal";
 import { useAuth } from "../hooks/useAuth";
-import type { Favourite, Film, WatchedCreateRequest, WatchedRecord, WatchlistItem } from "../types";
+import type {
+  Favourite,
+  Film,
+  MessageCreateRequest,
+  WatchedCreateRequest,
+  WatchedRecord,
+  WatchlistItem,
+} from "../types";
 
 function DetailPoster({ film }: { film: Film }) {
   if (!film.posterUrl) {
@@ -104,7 +114,9 @@ export function FilmDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isTrackingLoading, setIsTrackingLoading] = useState(false);
   const [isTrackingSubmitting, setIsTrackingSubmitting] = useState(false);
+  const [isMessageSubmitting, setIsMessageSubmitting] = useState(false);
   const [isWatchedModalOpen, setIsWatchedModalOpen] = useState(false);
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -273,6 +285,20 @@ export function FilmDetailPage() {
     }
   }
 
+  async function handleSendMessage(values: MessageCreateRequest) {
+    setIsMessageSubmitting(true);
+
+    try {
+      await sendMessage(values);
+      setIsMessageModalOpen(false);
+      messageApi.success("Message sent to admin.");
+    } catch (error) {
+      messageApi.error(getApiErrorMessage(error));
+    } finally {
+      setIsMessageSubmitting(false);
+    }
+  }
+
   if (isLoading) {
     return (
       <section className="page-stack">
@@ -393,6 +419,13 @@ export function FilmDetailPage() {
                       Remove watched
                     </Button>
                   ) : null}
+                  <Button
+                    icon={<MessageOutlined />}
+                    loading={isMessageSubmitting}
+                    onClick={() => setIsMessageModalOpen(true)}
+                  >
+                    Message admin about this film
+                  </Button>
                 </Space>
               ) : (
                 <Alert
@@ -419,6 +452,14 @@ export function FilmDetailPage() {
         submitting={isTrackingSubmitting}
         onCancel={() => setIsWatchedModalOpen(false)}
         onSubmit={handleWatchedSubmit}
+      />
+
+      <SendMessageModal
+        film={film}
+        open={isMessageModalOpen}
+        submitting={isMessageSubmitting}
+        onCancel={() => setIsMessageModalOpen(false)}
+        onSubmit={handleSendMessage}
       />
     </section>
   );
