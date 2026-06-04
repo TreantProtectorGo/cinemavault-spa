@@ -33,7 +33,7 @@ type FilmFilterFormValues = Omit<FilmQueryParams, "page" | "limit"> & {
 const defaultQuery: Required<Pick<FilmQueryParams, "page" | "limit" | "sortBy" | "order">> &
   Pick<FilmQueryParams, "isLive"> = {
   page: 1,
-  limit: 9,
+  limit: 8,
   sortBy: "createdAt",
   order: "desc",
   isLive: true,
@@ -125,7 +125,7 @@ export function FilmsPage() {
       isLive: true,
       sortBy: "createdAt",
       order: "desc",
-      limit: 9,
+      limit: 8,
     }),
     [],
   );
@@ -210,9 +210,8 @@ export function FilmsPage() {
             <Form.Item label="Per page" name="limit">
               <Select
                 options={[
-                  { label: "6", value: 6 },
-                  { label: "9", value: 9 },
-                  { label: "12", value: 12 },
+                  { label: "8", value: 8 },
+                  { label: "16", value: 16 },
                 ]}
               />
             </Form.Item>
@@ -276,7 +275,7 @@ export function FilmsPage() {
             align="center"
             current={filmsResponse.pagination.page}
             pageSize={filmsResponse.pagination.limit}
-            pageSizeOptions={[6, 9, 12]}
+            pageSizeOptions={[8, 16]}
             showSizeChanger
             total={filmsResponse.pagination.total}
             onChange={handlePageChange}
