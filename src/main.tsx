@@ -30,7 +30,7 @@ createRoot(document.getElementById("root")!).render(
       }}
     >
       {env.googleClientId ? (
-        <GoogleOAuthProvider clientId={env.googleClientId}>{app}</GoogleOAuthProvider>
+       <GoogleOAuthProvider clientId={env.googleClientId} locale="en">{app}</GoogleOAuthProvider>
       ) : (
         app
       )}
