@@ -1,9 +1,11 @@
 import { HeartOutlined, LockOutlined, MessageOutlined, VideoCameraOutlined } from "@ant-design/icons";
-import { Alert, Button, Card, Form, Input, message } from "antd";
+import { Alert, Button, Card, Divider, Form, Input, message } from "antd";
 import { useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { getApiErrorMessage } from "../api/client";
+import { GoogleAuthButton } from "../components/GoogleAuthButton";
 import { useAuth } from "../hooks/useAuth";
+import { env } from "../utils/env";
 import type { LoginRequest } from "../types";
 
 type LocationState = {
@@ -115,6 +117,12 @@ export function LoginPage() {
               }}
             </Form.Item>
           </Form>
+          {env.googleClientId ? (
+            <>
+              <Divider plain>External authentication</Divider>
+              <GoogleAuthButton mode="login" redirectedFrom={redirectedFrom} />
+            </>
+          ) : null}
         </Card>
       </div>
     </section>

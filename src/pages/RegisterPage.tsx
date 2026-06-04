@@ -1,9 +1,11 @@
 import { HeartOutlined, MessageOutlined, UserAddOutlined, VideoCameraOutlined } from "@ant-design/icons";
-import { Button, Card, Form, Input, message } from "antd";
+import { Button, Card, Divider, Form, Input, message } from "antd";
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { getApiErrorMessage } from "../api/client";
+import { GoogleAuthButton } from "../components/GoogleAuthButton";
 import { useAuth } from "../hooks/useAuth";
+import { env } from "../utils/env";
 import type { RegisterRequest } from "../types";
 
 type RegisterFormValues = RegisterRequest & {
@@ -134,6 +136,12 @@ export function RegisterPage() {
               Create account
             </Button>
           </Form>
+          {env.googleClientId ? (
+            <>
+              <Divider plain>External authentication</Divider>
+              <GoogleAuthButton mode="register" />
+            </>
+          ) : null}
         </Card>
       </div>
     </section>

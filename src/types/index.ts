@@ -23,6 +23,10 @@ export type RegisterRequest = {
   displayName?: string;
 };
 
+export type GoogleLoginRequest = {
+  credential: string;
+};
+
 export type LoginResponse = {
   user: UserPublic;
   token: string;
@@ -33,6 +37,7 @@ export type AuthContextValue = {
   token: string | null;
   login: (input: LoginRequest) => Promise<LoginResponse>;
   register: (input: RegisterRequest) => Promise<LoginResponse>;
+  loginWithGoogle: (input: GoogleLoginRequest) => Promise<LoginResponse>;
   refreshUser: () => Promise<UserPublic>;
   logout: () => void;
   isAuthenticated: boolean;

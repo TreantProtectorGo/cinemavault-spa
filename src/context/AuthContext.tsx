@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { loginRequest, registerRequest } from "../api/auth";
+import { googleLoginRequest, loginRequest, registerRequest } from "../api/auth";
 import { setBearerToken } from "../api/client";
 import { getCurrentUser } from "../api/profile";
 import { AuthContext } from "./auth-context-value";
 import type {
   AuthContextValue,
+  GoogleLoginRequest,
   LoginRequest,
   RegisterRequest,
   UserPublic,
@@ -107,6 +108,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
     [applyAuthResponse],
   );
 
+  const loginWithGoogle = useCallback(
+    async (input: GoogleLoginRequest) => {
+      const response = await googleLoginRequest(input);
+      applyAuthResponse(response);
+
+      return response;
+    },
+    [applyAuthResponse],
+  );
+
   const logout = useCallback(() => {
     setUser(null);
     setToken(null);
@@ -119,12 +130,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       token,
       login,
       register,
+      loginWithGoogle,
       refreshUser,
       logout,
       isAuthenticated: Boolean(token && user),
       isAdmin: user?.role === "ADMIN",
     }),
-    [login, logout, refreshUser, register, token, user],
+    [login, loginWithGoogle, logout, refreshUser, register, token, user],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

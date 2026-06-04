@@ -2,7 +2,7 @@
 
 CinemaVault SPA is the React TypeScript frontend repository for the Coventry University 6003CEM Web API Development CW2 project.
 
-This frontend repository contains the React SPA for CinemaVault, including public film browsing, JWT authentication, user tracking, direct messages, admin film management, OMDB import, and profile photo upload.
+This frontend repository contains the React SPA for CinemaVault, including public film browsing, JWT authentication, optional Google OAuth public-user sign-in, user tracking, direct messages, admin film management, OMDB import, and profile photo upload.
 
 ## Tech Stack
 
@@ -12,11 +12,13 @@ This frontend repository contains the React SPA for CinemaVault, including publi
 - React Router
 - Ant Design
 - Axios
+- Google OAuth React integration
 
 ## Feature List
 
 - Public film catalogue with search, filters, sorting, pagination, and film detail pages
 - JWT login/register flow with protected routes
+- Optional Google OAuth sign-in/register for public `USER` accounts
 - Role-aware navigation and admin-only route guard
 - User favourites, watchlist, and watched tracking pages
 - Direct messages between registered users and administrators
@@ -59,7 +61,10 @@ Configure the backend API base URL:
 
 ```env
 VITE_API_BASE_URL=http://localhost:4000
+VITE_GOOGLE_CLIENT_ID=replace-with-your-google-oauth-client-id
 ```
+
+`VITE_GOOGLE_CLIENT_ID` is optional. If it is not set, the Google sign-in button is hidden and the normal JWT email/password flow still works.
 
 Do not commit `.env`; it is ignored by git.
 
@@ -151,15 +156,17 @@ The SPA uses the backend JWT endpoints:
 ```text
 POST /api/v1/auth/login
 POST /api/v1/auth/register
+POST /api/v1/auth/google
 GET  /api/v1/admin/ping
 ```
 
-Normal frontend authentication uses JWT only. The backend Basic Auth endpoint remains coursework evidence and is not used by the SPA.
+Normal frontend sessions still use the backend JWT after login. Google OAuth is only an external authentication evidence path for public users; the backend never allows Google OAuth to create or authenticate administrator accounts. The backend Basic Auth endpoint remains coursework evidence and is not used by the SPA.
 
 Current auth behaviour:
 
 - Login submits `emailOrUsername` and `password`.
 - Register submits `email`, `username`, and `password` with frontend confirm-password validation.
+- Google sign-in sends the Google credential to the backend, then stores the returned CinemaVault JWT.
 - Successful login/register stores the JWT and public user object in `localStorage`.
 - Axios attaches the token as `Authorization: Bearer <token>`.
 - Logout clears local auth state and removes the bearer token.
