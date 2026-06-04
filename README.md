@@ -22,7 +22,7 @@ This frontend repository contains the React SPA for CinemaVault, including publi
 - Role-aware navigation and admin-only route guard
 - User favourites, watchlist, and watched tracking pages
 - Direct messages between registered users and administrators
-- Admin film management with create, edit, archive/delete, and OMDB import UI
+- Admin film management with create, edit, live/draft toggle, archive/delete, and OMDB import UI
 - User profile page with avatar upload
 - Route-level lazy loading with a shared loading fallback
 - Responsive Ant Design layout for desktop, tablet, and mobile
@@ -234,11 +234,13 @@ POST   /api/v1/films/import-omdb
 Current admin UI behaviour:
 
 - `/admin` is protected by `AdminRoute`.
-- Admin users can view live or archived films in a table.
+- Admin users can view live or draft films in a table.
 - Admin users can create films manually.
 - Admin users can edit existing films.
+- Admin users can toggle films between Live and Draft. Public browsing defaults to live films only, so incomplete draft records stay hidden from public users.
 - Admin users can archive films via delete action.
 - Admin users can import films from OMDB by IMDb ID or title.
+- Admin labels show whether each film is OMDB imported or manually entered.
 - Request failures show clean Ant Design messages.
 
 OMDB import requires the backend `.env` to include:

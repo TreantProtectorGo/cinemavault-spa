@@ -109,6 +109,20 @@ export function AdminDashboardPage() {
     }
   }
 
+  async function handleLiveToggle(film: Film) {
+    setIsSubmitting(true);
+
+    try {
+      await updateFilm(film.id, { isLive: !film.isLive });
+      messageApi.success(`${film.title} moved to ${film.isLive ? "draft" : "live"}.`);
+      await loadFilms();
+    } catch (error) {
+      messageApi.error(getApiErrorMessage(error));
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   async function handleOmdbImport(values: OmdbImportRequest) {
     setIsSubmitting(true);
 
@@ -164,7 +178,7 @@ export function AdminDashboardPage() {
           <Segmented<ListingMode>
             options={[
               { label: "Live", value: "live" },
-              { label: "Archived", value: "archived" },
+              { label: "Draft", value: "archived" },
             ]}
             value={listingMode}
             onChange={setListingMode}
@@ -176,6 +190,7 @@ export function AdminDashboardPage() {
           loading={isLoading || isSubmitting}
           onDelete={handleDelete}
           onEdit={openEditModal}
+          onToggleLive={handleLiveToggle}
         />
       </Card>
 

@@ -5,7 +5,7 @@ import {
   EyeOutlined,
   PictureOutlined,
 } from "@ant-design/icons";
-import { Button, Empty, Image, Popconfirm, Space, Table, Tag, Typography } from "antd";
+import { Button, Empty, Image, Popconfirm, Space, Switch, Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { Film } from "../types";
 
@@ -14,6 +14,7 @@ type AdminFilmTableProps = {
   loading: boolean;
   onEdit: (film: Film) => void;
   onDelete: (film: Film) => void;
+  onToggleLive: (film: Film) => void;
 };
 
 function PosterCell({ film }: { film: Film }) {
@@ -43,6 +44,7 @@ export function AdminFilmTable({
   loading,
   onDelete,
   onEdit,
+  onToggleLive,
 }: AdminFilmTableProps) {
   const columns: ColumnsType<Film> = [
     {
@@ -57,6 +59,14 @@ export function AdminFilmTable({
             <Typography.Text type="secondary">
               {film.director || "Director not listed"}
             </Typography.Text>
+            <Space wrap size={[6, 4]}>
+              <Tag color={film.isLive ? "green" : "default"}>
+                {film.isLive ? "LIVE" : "DRAFT"}
+              </Tag>
+              <Tag color={film.omdbMetadataJson || film.imdbId ? "blue" : "default"}>
+                {film.omdbMetadataJson || film.imdbId ? "OMDB imported" : "Manual entry"}
+              </Tag>
+            </Space>
           </div>
         </Space>
       ),
@@ -87,11 +97,19 @@ export function AdminFilmTable({
       title: "Status",
       dataIndex: "isLive",
       key: "isLive",
-      width: 108,
-      render: (isLive: Film["isLive"]) => (
-        <Tag color={isLive ? "green" : "default"}>
-          {isLive ? "Live" : "Archived"}
-        </Tag>
+      width: 150,
+      render: (_, film) => (
+        <Space direction="vertical" size={4}>
+          <Switch
+            checked={film.isLive}
+            checkedChildren="Live"
+            unCheckedChildren="Draft"
+            onChange={() => onToggleLive(film)}
+          />
+          <Typography.Text type="secondary">
+            {film.isLive ? "Public" : "Hidden"}
+          </Typography.Text>
+        </Space>
       ),
     },
     {
