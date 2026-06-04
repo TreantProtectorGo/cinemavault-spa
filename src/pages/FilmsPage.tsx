@@ -228,7 +228,7 @@ export function FilmsPage() {
             </Form.Item>
           </div>
 
-          <div className="filter-actions">
+          <div className="filter-actions film-filter-actions">
             <Button htmlType="submit" icon={<FilterOutlined />} type="primary">
               Search films
             </Button>
