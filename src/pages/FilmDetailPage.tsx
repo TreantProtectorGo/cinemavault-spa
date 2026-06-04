@@ -53,6 +53,7 @@ function DetailPoster({ film }: { film: Film }) {
     return (
       <div className="detail-poster detail-poster-empty">
         <PictureOutlined />
+        <span>{film.title}</span>
       </div>
     );
   }
@@ -214,7 +215,7 @@ export function FilmDetailPage() {
         messageApi.success("Removed from favourites.");
       } else {
         const result = await addFavourite(id);
-        setFavourite(result.record);
+        setFavourite(result);
         messageApi.success("Added to favourites.");
       }
     } catch (error) {
@@ -238,7 +239,7 @@ export function FilmDetailPage() {
         messageApi.success("Removed from watchlist.");
       } else {
         const result = await addWatchlistItem(id);
-        setWatchlistItem(result.record);
+        setWatchlistItem(result);
         messageApi.success("Added to watchlist.");
       }
     } catch (error) {
@@ -257,7 +258,7 @@ export function FilmDetailPage() {
 
     try {
       const result = await markWatched(id, values);
-      setWatchedRecord(result.record);
+      setWatchedRecord(result);
       setIsWatchedModalOpen(false);
       messageApi.success(watchedRecord ? "Watched record updated." : "Marked as watched.");
     } catch (error) {

@@ -36,6 +36,7 @@ function TrackingPoster({ film }: { film: Film }) {
     return (
       <div className="tracking-poster tracking-poster-empty">
         <PictureOutlined />
+        <span>{film.title}</span>
       </div>
     );
   }

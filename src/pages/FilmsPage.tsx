@@ -44,6 +44,7 @@ function FilmPoster({ film }: { film: Film }) {
     return (
       <div className="film-poster film-poster-empty">
         <PictureOutlined />
+        <span>{film.title}</span>
       </div>
     );
   }
@@ -80,7 +81,7 @@ function FilmCard({ film }: { film: Film }) {
           </Space>
         </div>
 
-        <Typography.Paragraph ellipsis={{ rows: 3 }} type="secondary">
+        <Typography.Paragraph ellipsis={{ rows: 2 }} type="secondary">
           {film.plot || film.cast || film.director || "Film metadata pending."}
         </Typography.Paragraph>
 
@@ -168,9 +169,11 @@ export function FilmsPage() {
 
   return (
     <section className="page-stack">
-      <div className="page-heading">
-        <h1>Films</h1>
-        <p>Browse public CinemaVault listings with backend search, filters, sorting, and pagination.</p>
+      <div className="page-heading films-heading">
+        <div className="films-heading-copy">
+          <h1>Films</h1>
+          <p>Search and browse the current CinemaVault film catalogue.</p>
+        </div>
       </div>
 
       <Card className="filter-card">
@@ -238,14 +241,14 @@ export function FilmsPage() {
             </Form.Item>
           </div>
 
-          <Space wrap>
+          <div className="filter-actions">
             <Button htmlType="submit" icon={<FilterOutlined />} type="primary">
               Search films
             </Button>
             <Button icon={<ClearOutlined />} onClick={handleReset}>
               Reset
             </Button>
-          </Space>
+          </div>
         </Form>
       </Card>
 
@@ -277,6 +280,15 @@ export function FilmsPage() {
 
       {!isLoading && !errorMessage && filmsResponse?.data.length ? (
         <>
+          <div className="film-results-bar">
+            <Typography.Text strong>
+              {filmsResponse.pagination.total} films
+            </Typography.Text>
+            <Typography.Text type="secondary">
+              Page {filmsResponse.pagination.page} of {filmsResponse.pagination.totalPages}
+            </Typography.Text>
+          </div>
+
           <div className="film-grid">
             {filmsResponse.data.map((film) => (
               <FilmCard film={film} key={film.id} />

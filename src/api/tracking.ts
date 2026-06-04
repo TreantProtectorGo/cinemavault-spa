@@ -13,11 +13,6 @@ type TrackingRemoveResponse = {
   links: Record<string, string>;
 };
 
-type TrackingMutationResponse<TRecord> = {
-  created: boolean;
-  record: TRecord;
-};
-
 export async function getFavourites() {
   const response =
     await apiClient.get<TrackingCollectionResponse<Favourite>>("/api/v1/favourites");
@@ -26,7 +21,7 @@ export async function getFavourites() {
 }
 
 export async function addFavourite(filmId: string) {
-  const response = await apiClient.post<TrackingMutationResponse<Favourite>>(
+  const response = await apiClient.post<Favourite>(
     `/api/v1/favourites/${filmId}`,
   );
 
@@ -49,7 +44,7 @@ export async function getWatchlist() {
 }
 
 export async function addWatchlistItem(filmId: string) {
-  const response = await apiClient.post<TrackingMutationResponse<WatchlistItem>>(
+  const response = await apiClient.post<WatchlistItem>(
     `/api/v1/watchlist/${filmId}`,
   );
 
@@ -72,7 +67,7 @@ export async function getWatched() {
 }
 
 export async function markWatched(filmId: string, data: WatchedCreateRequest) {
-  const response = await apiClient.post<TrackingMutationResponse<WatchedRecord>>(
+  const response = await apiClient.post<WatchedRecord>(
     `/api/v1/watched/${filmId}`,
     data,
   );
