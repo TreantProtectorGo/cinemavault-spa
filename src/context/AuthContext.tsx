@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { loginRequest, registerRequest } from "../api/auth";
 import { setBearerToken } from "../api/client";
+import { getCurrentUser } from "../api/profile";
 import { AuthContext } from "./auth-context-value";
 import type {
   AuthContextValue,
@@ -71,6 +72,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
     persistAuth(response);
   }, []);
 
+  const refreshUser = useCallback(async () => {
+    const nextUser = await getCurrentUser();
+
+    setUser(nextUser);
+    setToken((currentToken) => {
+      if (currentToken) {
+        persistAuth({ token: currentToken, user: nextUser });
+      }
+
+      return currentToken;
+    });
+
+    return nextUser;
+  }, []);
+
   const login = useCallback(
     async (input: LoginRequest) => {
       const response = await loginRequest(input);
@@ -103,11 +119,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
       token,
       login,
       register,
+      refreshUser,
       logout,
       isAuthenticated: Boolean(token && user),
       isAdmin: user?.role === "ADMIN",
     }),
-    [login, logout, register, token, user],
+    [login, logout, refreshUser, register, token, user],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -8,6 +8,7 @@ import {
   MessageOutlined,
   PlaySquareOutlined,
   UserAddOutlined,
+  UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
 
@@ -70,6 +71,13 @@ export const appRoutes: AppRouteMeta[] = [
     path: "/messages",
     label: "Messages",
     icon: <MessageOutlined />,
+    showInNav: true,
+    requiresAuth: true,
+  },
+  {
+    path: "/profile",
+    label: "Profile",
+    icon: <UserOutlined />,
     showInNav: true,
     requiresAuth: true,
   },

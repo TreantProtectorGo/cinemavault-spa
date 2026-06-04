@@ -9,6 +9,7 @@ import { HomePage } from "../pages/HomePage";
 import { LoginPage } from "../pages/LoginPage";
 import { MessagesPage } from "../pages/MessagesPage";
 import { NotFoundPage } from "../pages/NotFoundPage";
+import { ProfilePage } from "../pages/ProfilePage";
 import { RegisterPage } from "../pages/RegisterPage";
 import { WatchedPage } from "../pages/WatchedPage";
 import { WatchlistPage } from "../pages/WatchlistPage";
@@ -50,6 +51,14 @@ export function AppRoutes() {
           element={
             <ProtectedRoute>
               <MessagesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
             </ProtectedRoute>
           }
         />

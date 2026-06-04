@@ -2,7 +2,7 @@
 
 CinemaVault SPA is the React TypeScript frontend repository for the Coventry University 6003CEM Web API Development CW2 project.
 
-This frontend repository contains the React SPA for CinemaVault. Phase 8.3 adds admin film management and OMDB import UI against the backend Films API.
+This frontend repository contains the React SPA for CinemaVault, including public film browsing, JWT authentication, user tracking, direct messages, admin film management, OMDB import, and profile photo upload.
 
 ## Tech Stack
 
@@ -101,6 +101,7 @@ npm run build
 /watchlist    Watchlist, protected user route
 /watched      Watched records, protected user route
 /messages     User messages, protected user route
+/profile      Current user profile and avatar upload, protected user route
 /login        Login
 /register     Register
 /admin        Admin Dashboard, protected admin-only route
@@ -149,7 +150,25 @@ Current auth behaviour:
 - Logout clears local auth state and removes the bearer token.
 - Navigation shows Login/Register when logged out.
 - Navigation shows current username, role, and Logout when logged in.
+- Navigation shows a Profile link when logged in.
 - Admin navigation appears only for users with role `ADMIN`.
+
+## User Profile
+
+The profile page requires JWT login and uses these backend endpoints:
+
+```text
+GET  /api/v1/me
+POST /api/v1/me/profile-photo
+```
+
+Current profile UI behaviour:
+
+- `/profile` shows the current username, email, role, display name, and profile photo status.
+- Avatar upload accepts JPG, PNG, and WEBP images.
+- Upload requests use multipart/form-data with the `profilePhoto` field.
+- Successful uploads refresh the current profile and update stored auth user details.
+- Upload failures show clean Ant Design error messages.
 
 ## Public Film Browsing
 
@@ -255,7 +274,7 @@ Current message UI behaviour:
 - Admin users can reply to messages in a modal.
 - Admin users can soft-delete messages with confirmation.
 
-## Phase 8.5 Scope
+## Phase 8.6B Scope
 
 Implemented:
 
@@ -287,7 +306,11 @@ Implemented:
 - User messages page
 - Film detail message-admin modal
 - Admin messages inbox with reply and delete workflow
+- Profile API service
+- Protected profile page
+- Avatar upload UI with validation and success/error feedback
+- Profile link in authenticated navigation
 
 Not implemented yet:
 
-- Profile photo upload
+- Frontend automated tests

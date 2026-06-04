@@ -33,6 +33,7 @@ export type AuthContextValue = {
   token: string | null;
   login: (input: LoginRequest) => Promise<LoginResponse>;
   register: (input: RegisterRequest) => Promise<LoginResponse>;
+  refreshUser: () => Promise<UserPublic>;
   logout: () => void;
   isAuthenticated: boolean;
   isAdmin: boolean;
