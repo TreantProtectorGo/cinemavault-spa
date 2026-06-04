@@ -2,12 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ClearOutlined,
-  FilterOutlined,
   PictureOutlined,
   SearchOutlined,
+  SlidersOutlined,
 } from "@ant-design/icons";
 import {
   Alert,
+  Badge,
   Button,
   Card,
   Empty,
@@ -16,6 +17,7 @@ import {
   Input,
   InputNumber,
   Pagination,
+  Popover,
   Select,
   Skeleton,
   Space,
@@ -26,9 +28,7 @@ import { getApiErrorMessage } from "../api/client";
 import { getFilms } from "../api/films";
 import type { Film, FilmListResponse, FilmQueryParams } from "../types";
 
-type FilmFilterFormValues = Omit<FilmQueryParams, "page" | "limit"> & {
-  limit: number;
-};
+type FilmFilterFormValues = Omit<FilmQueryParams, "page" | "limit">;
 
 const defaultQuery: Required<Pick<FilmQueryParams, "page" | "limit" | "sortBy" | "order">> &
   Pick<FilmQueryParams, "isLive"> = {
@@ -125,16 +125,24 @@ export function FilmsPage() {
       isLive: true,
       sortBy: "createdAt",
       order: "desc",
-      limit: 8,
     }),
     [],
   );
+
+  const activeFilterCount = [
+    query.genre,
+    query.year,
+    query.rating,
+    query.isLive === false ? "archived" : undefined,
+    query.sortBy && query.sortBy !== defaultQuery.sortBy ? query.sortBy : undefined,
+    query.order && query.order !== defaultQuery.order ? query.order : undefined,
+  ].filter(Boolean).length;
 
   function handleSearch(values: FilmFilterFormValues) {
     setQuery({
       ...values,
       page: 1,
-      limit: values.limit ?? defaultQuery.limit,
+      limit: defaultQuery.limit,
     });
   }
 
@@ -151,90 +159,126 @@ export function FilmsPage() {
     }));
   }
 
+  const filterContent = (
+    <div className="film-filter-popover">
+      <Form.Item label="Genre" name="genre">
+        <Input allowClear aria-label="Filter by genre" placeholder="Action, Drama, Sci-Fi" />
+      </Form.Item>
+      <Form.Item label="Year" name="year">
+        <InputNumber
+          aria-label="Filter by year"
+          className="full-width"
+          max={2100}
+          min={1888}
+          placeholder="2008"
+        />
+      </Form.Item>
+      <Form.Item
+        label="Minimum rating"
+        name="rating"
+        rules={[
+          {
+            validator: (_, value) =>
+              value === undefined || value === null || value > 0
+                ? Promise.resolve()
+                : Promise.reject(new Error("Rating must be greater than 0.")),
+          },
+        ]}
+      >
+        <InputNumber
+          aria-label="Filter by minimum rating"
+          className="full-width"
+          max={10}
+          min={0.1}
+          placeholder="7.5"
+          step={0.1}
+        />
+      </Form.Item>
+      <Form.Item label="Status" name="isLive">
+        <Select
+          aria-label="Filter by status"
+          options={[
+            { label: "Live", value: true },
+            { label: "Archived", value: false },
+          ]}
+        />
+      </Form.Item>
+      <Form.Item label="Sort by" name="sortBy">
+        <Select
+          aria-label="Sort films by"
+          options={[
+            { label: "Recently updated", value: "updatedAt" },
+            { label: "Recently added", value: "createdAt" },
+            { label: "Title", value: "title" },
+            { label: "Year", value: "year" },
+            { label: "Rating", value: "rating" },
+            { label: "Genre", value: "genre" },
+          ]}
+        />
+      </Form.Item>
+      <Form.Item label="Order" name="order">
+        <Select
+          aria-label="Sort order"
+          options={[
+            { label: "Descending", value: "desc" },
+            { label: "Ascending", value: "asc" },
+          ]}
+        />
+      </Form.Item>
+      <Button block htmlType="submit" type="primary">
+        Apply filters
+      </Button>
+    </div>
+  );
+
   return (
     <section className="page-stack">
-      <Card className="filter-card">
+      <Card className="catalog-toolbar-card">
         <Form
           form={form}
           initialValues={initialFormValues}
-          layout="vertical"
+          layout="horizontal"
           onFinish={handleSearch}
         >
-          <div className="film-filter-grid">
-            <Form.Item label="Title" name="title">
-              <Input allowClear placeholder="Search by title" prefix={<SearchOutlined />} />
-            </Form.Item>
-            <Form.Item label="Genre" name="genre">
-              <Input allowClear placeholder="Action, Sci-Fi, Drama" />
-            </Form.Item>
-            <Form.Item label="Year" name="year">
-              <InputNumber className="full-width" max={2100} min={1888} placeholder="2008" />
-            </Form.Item>
-            <Form.Item
-              label="Rating"
-              name="rating"
-              rules={[
-                {
-                  validator: (_, value) =>
-                    value === undefined || value === null || value > 0
-                      ? Promise.resolve()
-                      : Promise.reject(new Error("Rating must be greater than 0.")),
-                },
-              ]}
-            >
-              <InputNumber
-                className="full-width"
-                max={10}
-                min={0.1}
-                placeholder=">0"
-                step={0.1}
+          <div className="catalog-toolbar">
+            <Form.Item className="catalog-search" name="title">
+              <Input
+                allowClear
+                aria-label="Search by title"
+                placeholder="Search films by title"
+                prefix={<SearchOutlined />}
               />
             </Form.Item>
-            <Form.Item label="Status" name="isLive">
-              <Select
-                options={[
-                  { label: "Live films", value: true },
-                  { label: "Archived films", value: false },
-                ]}
+            <div className="catalog-toolbar-actions">
+              <Popover
+                content={filterContent}
+                placement="bottomRight"
+                trigger="click"
+              >
+                <Badge count={activeFilterCount} size="small">
+                  <Button
+                    aria-label="Open filters"
+                    icon={<SlidersOutlined />}
+                    title="Filters"
+                  />
+                </Badge>
+              </Popover>
+              <Button
+                aria-label="Reset filters"
+                icon={<ClearOutlined />}
+                title="Reset filters"
+                onClick={handleReset}
               />
-            </Form.Item>
-            <Form.Item label="Sort by" name="sortBy">
-              <Select
-                options={[
-                  { label: "Recently updated", value: "updatedAt" },
-                  { label: "Recently added", value: "createdAt" },
-                  { label: "Title", value: "title" },
-                  { label: "Year", value: "year" },
-                  { label: "Rating", value: "rating" },
-                  { label: "Genre", value: "genre" },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item label="Order" name="order">
-              <Select
-                options={[
-                  { label: "Descending", value: "desc" },
-                  { label: "Ascending", value: "asc" },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item label="Per page" name="limit">
-              <Select
-                options={[
-                  { label: "8", value: 8 },
-                  { label: "16", value: 16 },
-                ]}
-              />
-            </Form.Item>
-          </div>
-
-          <div className="filter-actions film-filter-actions">
-            <Button htmlType="submit" icon={<FilterOutlined />} type="primary">
-              Search films
-            </Button>
-            <Button icon={<ClearOutlined />} onClick={handleReset}>
-              Reset
-            </Button>
+            </div>
+            {filmsResponse ? (
+              <div className="catalog-summary">
+                <strong>{filmsResponse.pagination.total} films</strong>
+                <span>
+                  Page {filmsResponse.pagination.page} of{" "}
+                  {filmsResponse.pagination.totalPages}
+                </span>
+              </div>
+            ) : null}
           </div>
         </Form>
       </Card>
@@ -267,15 +311,6 @@ export function FilmsPage() {
 
       {!isLoading && !errorMessage && filmsResponse?.data.length ? (
         <>
-          <div className="film-results-bar">
-            <Typography.Text strong>
-              {filmsResponse.pagination.total} films
-            </Typography.Text>
-            <Typography.Text type="secondary">
-              Page {filmsResponse.pagination.page} of {filmsResponse.pagination.totalPages}
-            </Typography.Text>
-          </div>
-
           <div className="film-grid">
             {filmsResponse.data.map((film) => (
               <FilmCard film={film} key={film.id} />
@@ -286,8 +321,7 @@ export function FilmsPage() {
             align="center"
             current={filmsResponse.pagination.page}
             pageSize={filmsResponse.pagination.limit}
-            pageSizeOptions={[8, 16]}
-            showSizeChanger
+            showSizeChanger={false}
             total={filmsResponse.pagination.total}
             onChange={handlePageChange}
           />
