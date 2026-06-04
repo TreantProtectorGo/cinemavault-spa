@@ -42,10 +42,6 @@ export function WatchlistPage() {
   return (
     <section className="page-stack">
       {contextHolder}
-      <div className="page-heading">
-        <h1>Watchlist</h1>
-        <p>Films you plan to watch.</p>
-      </div>
 
       {errorMessage ? (
         <Alert

@@ -5,7 +5,7 @@ import {
   ReloadOutlined,
   VideoCameraAddOutlined,
 } from "@ant-design/icons";
-import { Alert, Button, Card, Segmented, Space, Statistic, message } from "antd";
+import { Alert, Button, Card, Segmented, Space, Statistic, Typography, message } from "antd";
 import {
   createFilm,
   deleteFilm,
@@ -131,11 +131,10 @@ export function AdminDashboardPage() {
   return (
     <section className="page-stack">
       {contextHolder}
-      <div className="page-heading admin-heading">
-        <div>
-          <h1>Admin dashboard</h1>
-          <p>Manage CinemaVault film records and import metadata from OMDB.</p>
-        </div>
+      <div className="page-toolbar">
+        <Typography.Text type="secondary">
+          Manage film records and import metadata.
+        </Typography.Text>
         <Space wrap>
           <Button icon={<ReloadOutlined />} onClick={() => void loadFilms()}>
             Refresh

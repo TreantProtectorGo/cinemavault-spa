@@ -165,11 +165,10 @@ export function AdminMessagesPage() {
   return (
     <section className="page-stack">
       {contextHolder}
-      <div className="page-heading admin-heading">
-        <div>
-          <h1>Admin messages</h1>
-          <p>Review user questions, reply as admin, and soft-delete resolved messages.</p>
-        </div>
+      <div className="page-toolbar">
+        <Typography.Text type="secondary">
+          Review user questions, reply as admin, and soft-delete resolved messages.
+        </Typography.Text>
         <Space wrap>
           <Select
             allowClear

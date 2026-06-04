@@ -42,10 +42,6 @@ export function FavouritesPage() {
   return (
     <section className="page-stack">
       {contextHolder}
-      <div className="page-heading">
-        <h1>Favourites</h1>
-        <p>Your saved films for quick access.</p>
-      </div>
 
       {errorMessage ? (
         <Alert

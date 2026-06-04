@@ -105,6 +105,19 @@ a {
   color: #4b5563;
 }
 
+.page-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+}
+
+.page-toolbar > .ant-typography {
+  max-width: 620px;
+}
+
 .home-hero {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
@@ -377,17 +390,6 @@ a {
   gap: 2px 14px;
 }
 
-.films-heading {
-  max-width: 760px;
-}
-
-.films-heading-copy {
-  display: grid;
-  justify-items: start;
-  gap: 8px;
-  min-width: 0;
-}
-
 .filter-actions {
   display: flex;
   flex-wrap: wrap;
@@ -545,11 +547,6 @@ a {
   color: #374151;
   font-size: 1.05rem;
   line-height: 1.7;
-}
-
-.admin-heading {
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
 }
 
 .admin-stat-grid {
@@ -801,7 +798,6 @@ a {
   .home-hero,
   .home-cta-strip,
   .home-status-grid,
-  .admin-heading,
   .admin-stat-grid,
     .admin-form-grid,
     .film-filter-grid,

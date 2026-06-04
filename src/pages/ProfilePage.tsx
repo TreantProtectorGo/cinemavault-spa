@@ -98,10 +98,6 @@ export function ProfilePage() {
   return (
     <section className="page-stack">
       {contextHolder}
-      <div className="page-heading">
-        <h1>Profile</h1>
-        <p>Review your CinemaVault account details and update your profile photo.</p>
-      </div>
 
       {errorMessage ? (
         <Alert showIcon type="error" title="Could not load profile" description={errorMessage} />

@@ -42,10 +42,6 @@ export function WatchedPage() {
   return (
     <section className="page-stack">
       {contextHolder}
-      <div className="page-heading">
-        <h1>Watched</h1>
-        <p>Your watched films and personal ratings.</p>
-      </div>
 
       {errorMessage ? (
         <Alert

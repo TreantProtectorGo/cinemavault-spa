@@ -60,11 +60,10 @@ export function MessagesPage() {
   return (
     <section className="page-stack">
       {contextHolder}
-      <div className="page-heading admin-heading">
-        <div>
-          <h1>Messages</h1>
-          <p>Send questions to the CinemaVault admin team and review replies.</p>
-        </div>
+      <div className="page-toolbar">
+        <Typography.Text type="secondary">
+          Send questions to the CinemaVault admin team and review replies.
+        </Typography.Text>
         <Space wrap>
           <Button icon={<ReloadOutlined />} onClick={() => void loadMessages()}>
             Refresh

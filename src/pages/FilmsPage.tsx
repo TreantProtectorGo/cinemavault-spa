@@ -169,13 +169,6 @@ export function FilmsPage() {
 
   return (
     <section className="page-stack">
-      <div className="page-heading films-heading">
-        <div className="films-heading-copy">
-          <h1>Films</h1>
-          <p>Search and browse the current CinemaVault film catalogue.</p>
-        </div>
-      </div>
-
       <Card className="filter-card">
         <Form
           form={form}
