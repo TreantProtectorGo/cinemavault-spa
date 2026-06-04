@@ -80,20 +80,33 @@ export function AppLayout({ children }: AppLayoutProps) {
 
         {isAuthenticated && user ? (
           <Space className="auth-cluster">
-            <span className="user-pill">
-              <Avatar
-                className="nav-avatar"
-                icon={avatarUrl ? undefined : <UserOutlined />}
-                src={avatarUrl}
-              >
-                {avatarUrl ? null : fallbackInitial?.toUpperCase()}
-              </Avatar>
-              <Typography.Text strong>{user.username}</Typography.Text>
-              <Tag color={isAdmin ? "red" : "blue"}>{user.role}</Tag>
-            </span>
-            <Button icon={<LogoutOutlined />} onClick={handleLogout}>
-              Logout
-            </Button>
+            <div className="account-card">
+              <span className="user-pill">
+                <Avatar
+                  className="nav-avatar"
+                  icon={avatarUrl ? undefined : <UserOutlined />}
+                  src={avatarUrl}
+                >
+                  {avatarUrl ? null : fallbackInitial?.toUpperCase()}
+                </Avatar>
+                <Typography.Text className="nav-username" strong>
+                  {user.username}
+                </Typography.Text>
+                <Tag className="nav-role-tag" color={isAdmin ? "red" : "blue"}>
+                  {user.role}
+                </Tag>
+              </span>
+              <div className="account-menu-panel">
+                <Button
+                  block
+                  className="account-logout-button"
+                  icon={<LogoutOutlined />}
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              </div>
+            </div>
           </Space>
         ) : (
           <Space className="auth-cluster">

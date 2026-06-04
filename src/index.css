@@ -394,6 +394,13 @@ a {
   line-height: 1;
 }
 
+.account-card {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 76px;
+}
+
 .user-pill {
   display: inline-flex;
   align-items: center;
@@ -404,6 +411,18 @@ a {
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   background: #f9fafb;
+  cursor: default;
+  transition:
+    border-color 0.16s ease,
+    box-shadow 0.16s ease,
+    background 0.16s ease;
+}
+
+.account-card:hover .user-pill,
+.account-card:focus-within .user-pill {
+  border-color: #bfdbfe;
+  background: #ffffff;
+  box-shadow: 0 10px 26px rgba(17, 24, 39, 0.1);
 }
 
 .nav-avatar {
@@ -435,6 +454,36 @@ a {
   display: inline-flex;
   align-items: center;
   height: 42px;
+}
+
+.account-menu-panel {
+  position: absolute;
+  top: calc(100% - 8px);
+  right: 0;
+  z-index: 20;
+  min-width: 154px;
+  padding: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 18px 38px rgba(17, 24, 39, 0.14);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+}
+
+.account-card:hover .account-menu-panel,
+.account-card:focus-within .account-menu-panel {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.account-logout-button {
+  justify-content: flex-start;
 }
 
 .auth-card {
@@ -922,6 +971,16 @@ a {
   .auth-cluster {
     height: auto;
     justify-content: flex-start;
+  }
+
+  .account-card {
+    height: auto;
+  }
+
+  .account-menu-panel {
+    top: calc(100% + 8px);
+    right: auto;
+    left: 0;
   }
 
   .nav-role-tag,
