@@ -4,7 +4,6 @@ import {
   MessageOutlined,
   PlayCircleOutlined,
   SearchOutlined,
-  VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { Button, Card, Tag } from "antd";
@@ -49,11 +48,6 @@ export function HomePage() {
             <Tag>Thriller</Tag>
           </div>
           <div className="home-panel-actions">
-            <Link to="/films">
-              <Button block icon={<VideoCameraOutlined />}>
-                Browse catalogue
-              </Button>
-            </Link>
             {isAuthenticated ? (
               <Link to="/messages">
                 <Button block icon={<MessageOutlined />}>
@@ -99,11 +93,19 @@ export function HomePage() {
             <p>Start from the catalogue, then save titles into the list that fits your plan.</p>
           </div>
           <div className="home-cta-actions">
-            <Link to="/films">
-              <Button icon={<VideoCameraOutlined />} type="primary">
-                View catalogue
-              </Button>
-            </Link>
+            {isAuthenticated ? (
+              <Link to="/watchlist">
+                <Button icon={<HeartOutlined />} type="primary">
+                  Open watchlist
+                </Button>
+              </Link>
+            ) : (
+              <Link to="/login">
+                <Button icon={<ArrowRightOutlined />} type="primary">
+                  Sign in to save films
+                </Button>
+              </Link>
+            )}
             {isAdmin ? (
               <Link to="/admin">
                 <Button>Admin dashboard</Button>
