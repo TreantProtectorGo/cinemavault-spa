@@ -15,7 +15,6 @@ import {
   Form,
   Image,
   Input,
-  InputNumber,
   Pagination,
   Popover,
   Select,
@@ -38,6 +37,30 @@ const defaultQuery: Required<Pick<FilmQueryParams, "page" | "limit" | "sortBy" |
   order: "desc",
   isLive: true,
 };
+
+const genreOptions = [
+  "Action",
+  "Adventure",
+  "Animation",
+  "Comedy",
+  "Crime",
+  "Drama",
+  "Fantasy",
+  "Horror",
+  "Mystery",
+  "Romance",
+  "Sci-Fi",
+  "Thriller",
+].map((genre) => ({ label: genre, value: genre }));
+
+const yearOptions = Array.from({ length: 2026 - 1970 + 1 }, (_, index) => 2026 - index).map(
+  (year) => ({ label: String(year), value: year }),
+);
+
+const ratingOptions = Array.from({ length: 10 }, (_, index) => index + 1).map((rating) => ({
+  label: `IMDb ${rating}+`,
+  value: rating,
+}));
 
 function FilmPoster({ film }: { film: Film }) {
   if (!film.posterUrl) {
@@ -82,6 +105,7 @@ export function FilmsPage() {
   const [query, setQuery] = useState<FilmQueryParams>(defaultQuery);
   const [filmsResponse, setFilmsResponse] = useState<FilmListResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -149,6 +173,7 @@ export function FilmsPage() {
   function handleReset() {
     form.resetFields();
     setQuery(defaultQuery);
+    setIsFilterOpen(false);
   }
 
   function handlePageChange(page: number, limit: number) {
@@ -159,39 +184,39 @@ export function FilmsPage() {
     }));
   }
 
+  async function handleApplyFilters() {
+    const values = await form.validateFields();
+
+    handleSearch(values);
+    setIsFilterOpen(false);
+  }
+
   const filterContent = (
     <div className="film-filter-popover">
       <Form.Item label="Genre" name="genre">
-        <Input allowClear aria-label="Filter by genre" placeholder="Action, Drama, Sci-Fi" />
-      </Form.Item>
-      <Form.Item label="Year" name="year">
-        <InputNumber
-          aria-label="Filter by year"
-          className="full-width"
-          max={2100}
-          min={1888}
-          placeholder="2008"
+        <Select
+          allowClear
+          aria-label="Filter by genre"
+          options={genreOptions}
+          placeholder="Choose genre"
+          showSearch
         />
       </Form.Item>
-      <Form.Item
-        label="Minimum rating"
-        name="rating"
-        rules={[
-          {
-            validator: (_, value) =>
-              value === undefined || value === null || value > 0
-                ? Promise.resolve()
-                : Promise.reject(new Error("Rating must be greater than 0.")),
-          },
-        ]}
-      >
-        <InputNumber
-          aria-label="Filter by minimum rating"
-          className="full-width"
-          max={10}
-          min={0.1}
-          placeholder="7.5"
-          step={0.1}
+      <Form.Item label="Year" name="year">
+        <Select
+          allowClear
+          aria-label="Filter by year"
+          options={yearOptions}
+          placeholder="Choose year"
+          showSearch
+        />
+      </Form.Item>
+      <Form.Item label="Rating" name="rating">
+        <Select
+          allowClear
+          aria-label="Filter by rating"
+          options={ratingOptions}
+          placeholder="Choose rating"
         />
       </Form.Item>
       <Form.Item label="Status" name="isLive">
@@ -225,7 +250,7 @@ export function FilmsPage() {
           ]}
         />
       </Form.Item>
-      <Button block htmlType="submit" type="primary">
+      <Button block type="primary" onClick={() => void handleApplyFilters()}>
         Apply filters
       </Button>
     </div>
@@ -235,6 +260,7 @@ export function FilmsPage() {
     <section className="page-stack">
       <Card className="catalog-toolbar-card">
         <Form
+          colon={false}
           form={form}
           initialValues={initialFormValues}
           layout="horizontal"
@@ -252,8 +278,10 @@ export function FilmsPage() {
             <div className="catalog-toolbar-actions">
               <Popover
                 content={filterContent}
+                open={isFilterOpen}
                 placement="bottomRight"
                 trigger="click"
+                onOpenChange={setIsFilterOpen}
               >
                 <Badge count={activeFilterCount} size="small">
                   <Button

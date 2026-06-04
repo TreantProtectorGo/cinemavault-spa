@@ -644,8 +644,15 @@ a {
   margin-bottom: 0;
 }
 
+.film-filter-popover .ant-form-item-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+
 .film-filter-popover .ant-form-item-label {
   padding-bottom: 3px;
+  text-align: left;
 }
 
 .film-filter-popover .ant-form-item-label > label {
@@ -654,8 +661,18 @@ a {
   font-weight: 650;
 }
 
+.film-filter-popover .ant-form-item-label > label::after {
+  display: none;
+}
+
+.film-filter-popover .ant-form-item-control,
+.film-filter-popover .ant-form-item-control-input,
+.film-filter-popover .ant-form-item-control-input-content,
+.film-filter-popover .ant-select {
+  width: 100%;
+}
+
 .film-filter-popover .ant-input,
-.film-filter-popover .ant-input-number,
 .film-filter-popover .ant-select-selector {
   min-height: 38px;
 }
