@@ -170,12 +170,23 @@ export function FilmsPage() {
             <Form.Item label="Year" name="year">
               <InputNumber className="full-width" max={2100} min={1888} placeholder="2008" />
             </Form.Item>
-            <Form.Item label="Rating" name="rating">
+            <Form.Item
+              label="Rating"
+              name="rating"
+              rules={[
+                {
+                  validator: (_, value) =>
+                    value === undefined || value === null || value > 0
+                      ? Promise.resolve()
+                      : Promise.reject(new Error("Rating must be greater than 0.")),
+                },
+              ]}
+            >
               <InputNumber
                 className="full-width"
                 max={10}
-                min={0}
-                placeholder="8.8"
+                min={0.1}
+                placeholder=">0"
                 step={0.1}
               />
             </Form.Item>
