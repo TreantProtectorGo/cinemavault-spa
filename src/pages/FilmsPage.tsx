@@ -62,34 +62,18 @@ function FilmPoster({ film }: { film: Film }) {
 
 function FilmCard({ film }: { film: Film }) {
   return (
-    <Card
-      className="film-card"
-      cover={<FilmPoster film={film} />}
-      actions={[
-        <Link key="detail" to={`/films/${film.id}`}>
-          View detail
-        </Link>,
-      ]}
-    >
-      <Space className="film-card-meta" orientation="vertical" size={10}>
-        <div>
+    <Link className="film-card-link" aria-label={`Open ${film.title} detail`} to={`/films/${film.id}`}>
+      <Card className="film-card" cover={<FilmPoster film={film} />}>
+        <Space className="film-card-meta" orientation="vertical" size={10}>
           <Typography.Title level={3}>{film.title}</Typography.Title>
           <Space wrap size={[6, 6]}>
             {film.genre ? <Tag>{film.genre}</Tag> : null}
             {film.year ? <Tag color="blue">{film.year}</Tag> : null}
             {film.rating !== null ? <Tag color="gold">IMDb {film.rating}</Tag> : null}
           </Space>
-        </div>
-
-        <Typography.Paragraph ellipsis={{ rows: 2 }} type="secondary">
-          {film.plot || film.cast || film.director || "Film metadata pending."}
-        </Typography.Paragraph>
-
-        <Typography.Text type="secondary">
-          {film.director ? `Director: ${film.director}` : "Director not listed"}
-        </Typography.Text>
-      </Space>
-    </Card>
+        </Space>
+      </Card>
+    </Link>
   );
 }
 

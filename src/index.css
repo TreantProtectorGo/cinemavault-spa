@@ -418,8 +418,21 @@ a {
   gap: 16px;
 }
 
+.film-card-link {
+  display: block;
+  height: 100%;
+  color: inherit;
+}
+
+.film-card-link:focus-visible {
+  border-radius: 8px;
+  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline-offset: 3px;
+}
+
 .film-card {
   overflow: hidden;
+  height: 100%;
   border-color: #e5e7eb;
   transition:
     border-color 0.18s ease,
@@ -434,11 +447,8 @@ a {
 }
 
 .film-card .ant-card-body {
-  min-height: 204px;
-}
-
-.film-card .ant-card-actions {
-  background: #fbfdff;
+  min-height: 132px;
+  padding: 16px;
 }
 
 .film-card-meta {
@@ -446,7 +456,7 @@ a {
 }
 
 .film-card h3.ant-typography {
-  margin: 0 0 8px;
+  margin: 0;
   font-size: 1.12rem;
   line-height: 1.25;
 }
