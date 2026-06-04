@@ -9,10 +9,10 @@ export function HomePage() {
   return (
     <section className="page-stack">
       <div className="page-heading">
-        <h1>CinemaVault workspace</h1>
+        <h1>CinemaVault</h1>
         <p>
-          React TypeScript scaffold for the secure film discovery SPA. Full
-          feature wiring will be added in later phases.
+          Secure film discovery workspace with public browsing, authenticated
+          saved lists, direct messages, profile management, and admin film tools.
         </p>
       </div>
 
@@ -25,32 +25,32 @@ export function HomePage() {
 
       <div className="summary-grid">
         <PlaceholderPanel title="Public browsing" icon={<VideoCameraOutlined />}>
-          Placeholder for public film listing, filters, search, and film detail
-          navigation.
+          Search, filter, sort, and open film detail pages from the live backend
+          catalogue.
         </PlaceholderPanel>
         <PlaceholderPanel title="Secure user flows" icon={<SafetyCertificateOutlined />}>
-          Placeholder for JWT login, registration, favourites, watchlist, watched
-          records, and messages.
+          JWT login unlocks favourites, watchlist, watched records, messages, and
+          profile photo upload.
         </PlaceholderPanel>
         <PlaceholderPanel title="Admin tools" icon={<ApiOutlined />}>
-          Placeholder for admin-only film management, OMDB import, and message
+          Admin-only dashboard supports film management, OMDB import, and message
           replies.
         </PlaceholderPanel>
       </div>
 
-      <Card title="Phase 8.0 scope">
+      <Card title="Frontend status">
         <div className="status-strip">
           <div className="status-item">
-            <strong>Router</strong>
-            <span>Configured with placeholder routes</span>
-          </div>
-          <div className="status-item">
-            <strong>UI library</strong>
-            <span>Ant Design installed and themed</span>
+            <strong>SPA routes</strong>
+            <span>Protected user and admin areas are wired</span>
           </div>
           <div className="status-item">
             <strong>API client</strong>
-            <span>Axios wrapper reads VITE_API_BASE_URL</span>
+            <span>Axios uses the configured backend URL</span>
+          </div>
+          <div className="status-item">
+            <strong>Documentation</strong>
+            <span>Backend OpenAPI docs remain available at /api-docs</span>
           </div>
         </div>
       </Card>

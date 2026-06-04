@@ -47,7 +47,14 @@ export function FavouritesPage() {
         <p>Your saved films for quick access.</p>
       </div>
 
-      {errorMessage ? <Alert showIcon type="error" message={errorMessage} /> : null}
+      {errorMessage ? (
+        <Alert
+          showIcon
+          type="error"
+          message="Could not load favourites"
+          description={`${errorMessage} Please login again if your session expired.`}
+        />
+      ) : null}
 
       <TrackingFilmList
         emptyText="No favourites yet."

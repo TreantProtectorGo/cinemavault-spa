@@ -47,7 +47,14 @@ export function WatchlistPage() {
         <p>Films you plan to watch.</p>
       </div>
 
-      {errorMessage ? <Alert showIcon type="error" message={errorMessage} /> : null}
+      {errorMessage ? (
+        <Alert
+          showIcon
+          type="error"
+          message="Could not load watchlist"
+          description={`${errorMessage} Please login again if your session expired.`}
+        />
+      ) : null}
 
       <TrackingFilmList
         emptyText="Your watchlist is empty."

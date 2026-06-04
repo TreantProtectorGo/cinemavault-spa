@@ -13,6 +13,18 @@ This frontend repository contains the React SPA for CinemaVault, including publi
 - Ant Design
 - Axios
 
+## Feature List
+
+- Public film catalogue with search, filters, sorting, pagination, and film detail pages
+- JWT login/register flow with protected routes
+- Role-aware navigation and admin-only route guard
+- User favourites, watchlist, and watched tracking pages
+- Direct messages between registered users and administrators
+- Admin film management with create, edit, archive/delete, and OMDB import UI
+- User profile page with avatar upload
+- Route-level lazy loading with a shared loading fallback
+- Responsive Ant Design layout for desktop, tablet, and mobile
+
 ## Backend Dependency
 
 The SPA expects the CinemaVault backend API to be running separately.
@@ -119,6 +131,9 @@ src/
     auth.ts
     client.ts
     films.ts
+    messages.ts
+    profile.ts
+    tracking.ts
   components/
   context/
   hooks/
@@ -274,7 +289,13 @@ Current message UI behaviour:
 - Admin users can reply to messages in a modal.
 - Admin users can soft-delete messages with confirmation.
 
-## Phase 8.6B Scope
+## Build And Bundle Note
+
+Major page routes use `React.lazy` and `Suspense`, so page code is split by route instead of being loaded entirely in the first JavaScript chunk.
+
+Vite may still show a large chunk warning because Ant Design and its supporting runtime are substantial dependencies. In Phase 8.7, route-level lazy loading reduced the largest emitted JavaScript chunk from about `1,282.89 kB` to about `699.64 kB`; a manual chunk experiment caused circular chunk warnings, so it was not kept.
+
+## Phase 8.7 Scope
 
 Implemented:
 
@@ -284,7 +305,7 @@ Implemented:
 - Axios API client wrapper
 - `VITE_API_BASE_URL` environment support
 - Navigation layout
-- Responsive placeholder pages
+- Responsive final pages
 - README, `.env.example`, and `.gitignore`
 - Auth TypeScript types
 - Auth API service
@@ -310,6 +331,9 @@ Implemented:
 - Protected profile page
 - Avatar upload UI with validation and success/error feedback
 - Profile link in authenticated navigation
+- Route-level lazy loading with global loading fallback
+- Navigation active-state polish for nested routes
+- Final README frontend documentation
 
 Not implemented yet:
 

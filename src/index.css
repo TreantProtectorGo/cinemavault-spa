@@ -171,6 +171,19 @@ a {
   border-color: #e5e7eb;
 }
 
+.route-loading-card {
+  display: grid;
+  min-height: 260px;
+  place-items: center;
+  border-color: #e5e7eb;
+}
+
+.route-loading-card .ant-card-body {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+}
+
 .filter-card {
   border-color: #e5e7eb;
 }

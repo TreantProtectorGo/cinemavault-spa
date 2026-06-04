@@ -47,7 +47,14 @@ export function WatchedPage() {
         <p>Your watched films and personal ratings.</p>
       </div>
 
-      {errorMessage ? <Alert showIcon type="error" message={errorMessage} /> : null}
+      {errorMessage ? (
+        <Alert
+          showIcon
+          type="error"
+          message="Could not load watched records"
+          description={`${errorMessage} Please login again if your session expired.`}
+        />
+      ) : null}
 
       <TrackingFilmList
         emptyText="No watched films yet."

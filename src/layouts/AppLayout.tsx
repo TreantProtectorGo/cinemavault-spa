@@ -21,7 +21,14 @@ export function AppLayout({ children }: AppLayoutProps) {
   const navigate = useNavigate();
   const { isAuthenticated, isAdmin, logout, user } = useAuth();
   const activeKey =
-    appRoutes.find((route) => location.pathname === route.path)?.path ?? "/";
+    appRoutes
+      .filter((route) =>
+        route.path === "/"
+          ? location.pathname === "/"
+          : location.pathname === route.path ||
+            location.pathname.startsWith(`${route.path}/`),
+      )
+      .sort((left, right) => right.path.length - left.path.length)[0]?.path ?? "/";
 
   const visibleRoutes = appRoutes.filter((route) => {
     if (!route.showInNav) {
@@ -77,10 +84,14 @@ export function AppLayout({ children }: AppLayoutProps) {
           </Space>
         ) : (
           <Space className="auth-cluster">
-            <Button icon={<LoginOutlined />} href="/login">
+            <Button icon={<LoginOutlined />} onClick={() => navigate("/login")}>
               Login
             </Button>
-            <Button type="primary" icon={<UserAddOutlined />} href="/register">
+            <Button
+              type="primary"
+              icon={<UserAddOutlined />}
+              onClick={() => navigate("/register")}
+            >
               Register
             </Button>
           </Space>

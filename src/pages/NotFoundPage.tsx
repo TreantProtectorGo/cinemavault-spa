@@ -6,7 +6,7 @@ export function NotFoundPage() {
     <Result
       status="404"
       title="Page not found"
-      subTitle="The requested CinemaVault page is not part of this scaffold."
+      subTitle="The requested CinemaVault page is not available."
       extra={
         <Link to="/">
           <Button type="primary">Back to home</Button>
