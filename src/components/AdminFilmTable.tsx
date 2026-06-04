@@ -19,20 +19,22 @@ type AdminFilmTableProps = {
 function PosterCell({ film }: { film: Film }) {
   if (!film.posterUrl) {
     return (
-      <div className="admin-poster admin-poster-empty">
+      <div className="admin-poster-frame admin-poster-empty">
         <PictureOutlined />
       </div>
     );
   }
 
   return (
-    <Image
-      alt={`${film.title} poster`}
-      className="admin-poster"
-      fallback=""
-      preview={false}
-      src={film.posterUrl}
-    />
+    <div className="admin-poster-frame">
+      <Image
+        alt={`${film.title} poster`}
+        className="admin-poster"
+        fallback=""
+        preview={false}
+        src={film.posterUrl}
+      />
+    </div>
   );
 }
 
@@ -48,7 +50,7 @@ export function AdminFilmTable({
       dataIndex: "title",
       key: "title",
       render: (_, film) => (
-        <Space size={12}>
+        <Space align="center" className="admin-film-cell" size={12}>
           <PosterCell film={film} />
           <div className="admin-film-title">
             <Typography.Text strong>{film.title}</Typography.Text>

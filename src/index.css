@@ -134,6 +134,37 @@ a {
   max-width: 620px;
 }
 
+.toolbar-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.admin-loaded-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  min-height: 34px;
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(17, 24, 39, 0.04);
+}
+
+.admin-loaded-chip strong {
+  color: #111827;
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.admin-loaded-chip span {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
 .home-hero {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
@@ -614,16 +645,24 @@ a {
   border-color: #e5e7eb;
 }
 
-.admin-poster {
+.admin-film-cell {
+  min-width: 0;
+}
+
+.admin-poster-frame {
   display: block;
+  flex: 0 0 48px;
   width: 48px;
   height: 66px;
-  object-fit: cover;
+  overflow: hidden;
   border-radius: 6px;
   background: #111827;
 }
 
+.admin-poster,
+.admin-poster .ant-image,
 .admin-poster .ant-image-img {
+  display: block;
   width: 48px;
   height: 66px;
   object-fit: cover;

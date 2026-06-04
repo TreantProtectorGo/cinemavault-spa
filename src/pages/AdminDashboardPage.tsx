@@ -3,9 +3,8 @@ import {
   CloudDownloadOutlined,
   PlusOutlined,
   ReloadOutlined,
-  VideoCameraAddOutlined,
 } from "@ant-design/icons";
-import { Alert, Button, Card, Segmented, Space, Statistic, Typography, message } from "antd";
+import { Alert, Button, Card, Segmented, Space, Typography, message } from "antd";
 import {
   createFilm,
   deleteFilm,
@@ -132,9 +131,15 @@ export function AdminDashboardPage() {
     <section className="page-stack">
       {contextHolder}
       <div className="page-toolbar">
-        <Typography.Text type="secondary">
-          Manage film records and import metadata.
-        </Typography.Text>
+        <div className="toolbar-summary">
+          <Typography.Text type="secondary">
+            Manage film records and import metadata.
+          </Typography.Text>
+          <span className="admin-loaded-chip">
+            <strong>{films.length}</strong>
+            <span>films loaded</span>
+          </span>
+        </div>
         <Space wrap>
           <Button icon={<ReloadOutlined />} onClick={() => void loadFilms()}>
             Refresh
@@ -146,22 +151,6 @@ export function AdminDashboardPage() {
             Create film
           </Button>
         </Space>
-      </div>
-
-      <div className="admin-stat-grid">
-        <Card>
-          <Statistic title="Current view" value={listingMode === "live" ? "Live" : "Archived"} />
-        </Card>
-        <Card>
-          <Statistic title="Films loaded" value={films.length} />
-        </Card>
-        <Card>
-          <Statistic
-            prefix={<VideoCameraAddOutlined />}
-            title="Management"
-            value="CRUD"
-          />
-        </Card>
       </div>
 
       {errorMessage ? (
