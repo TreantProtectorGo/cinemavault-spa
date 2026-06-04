@@ -18,22 +18,11 @@ import { getApiErrorMessage } from "../api/client";
 import { uploadProfilePhoto } from "../api/profile";
 import { useAuth } from "../hooks/useAuth";
 import { useApiBaseUrl } from "../hooks/useApiBaseUrl";
+import { resolveAssetUrl } from "../utils/assets";
 import type { UserPublic } from "../types";
 
 const allowedAvatarTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
 const maxAvatarSizeBytes = 2 * 1024 * 1024;
-
-function resolveProfilePhotoUrl(value: string | null | undefined, apiBaseUrl: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  if (value.startsWith("http://") || value.startsWith("https://")) {
-    return value;
-  }
-
-  return new URL(value, apiBaseUrl).toString();
-}
 
 export function ProfilePage() {
   const [messageApi, contextHolder] = message.useMessage();
@@ -45,7 +34,7 @@ export function ProfilePage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const avatarUrl = useMemo(
-    () => resolveProfilePhotoUrl(profile?.profilePhotoUrl, apiBaseUrl),
+    () => resolveAssetUrl(profile?.profilePhotoUrl, apiBaseUrl),
     [apiBaseUrl, profile?.profilePhotoUrl],
   );
 

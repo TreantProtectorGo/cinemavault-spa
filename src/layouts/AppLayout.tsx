@@ -1,13 +1,16 @@
 import type { ReactNode } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Button, Layout, Menu, Space, Tag, Typography } from "antd";
+import { Avatar, Button, Layout, Menu, Space, Tag, Typography } from "antd";
 import {
   LoginOutlined,
   LogoutOutlined,
   UserAddOutlined,
+  UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { useAuth } from "../hooks/useAuth";
+import { useApiBaseUrl } from "../hooks/useApiBaseUrl";
+import { resolveAssetUrl } from "../utils/assets";
 import { appRoutes } from "../utils/routes";
 
 const { Header, Content } = Layout;
@@ -20,6 +23,9 @@ export function AppLayout({ children }: AppLayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated, isAdmin, logout, user } = useAuth();
+  const apiBaseUrl = useApiBaseUrl();
+  const avatarUrl = resolveAssetUrl(user?.profilePhotoUrl, apiBaseUrl);
+  const fallbackInitial = user?.displayName?.[0] ?? user?.username?.[0];
   const activeKey =
     appRoutes
       .filter((route) =>
@@ -75,6 +81,13 @@ export function AppLayout({ children }: AppLayoutProps) {
         {isAuthenticated && user ? (
           <Space className="auth-cluster">
             <span className="user-pill">
+              <Avatar
+                className="nav-avatar"
+                icon={avatarUrl ? undefined : <UserOutlined />}
+                src={avatarUrl}
+              >
+                {avatarUrl ? null : fallbackInitial?.toUpperCase()}
+              </Avatar>
               <Typography.Text strong>{user.username}</Typography.Text>
               <Tag color={isAdmin ? "red" : "blue"}>{user.role}</Tag>
             </span>
