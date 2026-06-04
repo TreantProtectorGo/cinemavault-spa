@@ -90,7 +90,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                   {avatarUrl ? null : fallbackInitial?.toUpperCase()}
                 </Avatar>
                 <Typography.Text className="nav-username" strong>
-                  {user.username}
+                  {user.displayName || user.username}
                 </Typography.Text>
                 <Tag className="nav-role-tag" color={isAdmin ? "red" : "blue"}>
                   {user.role}

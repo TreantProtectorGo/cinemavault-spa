@@ -38,7 +38,9 @@ export function HomePage() {
 
         <div className="home-hero-panel">
           <div className="home-panel-kicker">
-            {isAuthenticated ? `Welcome back, ${user?.username ?? "member"}` : "Start browsing"}
+            {isAuthenticated
+              ? `Welcome back, ${user?.displayName || user?.username || "member"}`
+              : "Start browsing"}
           </div>
           <div className="home-panel-title">Build a list for tonight</div>
           <div className="home-panel-tags">
