@@ -344,11 +344,14 @@ export function FilmDetailPage() {
   return (
     <section className="page-stack">
       {contextHolder}
-      <Link to="/films">
-        <Button icon={<ArrowLeftOutlined />}>Back to films</Button>
-      </Link>
 
       <Card className="film-detail-card">
+        <div className="film-detail-toolbar">
+          <Link to="/films">
+            <Button icon={<ArrowLeftOutlined />}>Back to films</Button>
+          </Link>
+        </div>
+
         <div className="film-detail-layout">
           <DetailPoster film={film} />
 
