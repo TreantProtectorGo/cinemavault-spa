@@ -51,7 +51,7 @@ export function WatchedPage() {
         <Alert
           showIcon
           type="error"
-          message="Could not load watched records"
+          title="Could not load watched records"
           description={`${errorMessage} Please login again if your session expired.`}
         />
       ) : null}

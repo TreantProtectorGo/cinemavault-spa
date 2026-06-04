@@ -166,7 +166,7 @@ export function AdminDashboardPage() {
       </div>
 
       {errorMessage ? (
-        <Alert showIcon type="error" message="Admin request failed" description={errorMessage} />
+        <Alert showIcon type="error" title="Admin request failed" description={errorMessage} />
       ) : null}
 
       <Card

@@ -51,7 +51,7 @@ export function FavouritesPage() {
         <Alert
           showIcon
           type="error"
-          message="Could not load favourites"
+          title="Could not load favourites"
           description={`${errorMessage} Please login again if your session expired.`}
         />
       ) : null}

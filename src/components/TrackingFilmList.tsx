@@ -81,7 +81,7 @@ export function TrackingFilmList<TRecord extends TrackingFilmRecord>({
           <div className="tracking-card-layout">
             <TrackingPoster film={record.film} />
             <div className="tracking-card-copy">
-              <Space direction="vertical" size={10}>
+              <Space orientation="vertical" size={10}>
                 <div>
                   <Typography.Title level={3}>{record.film.title}</Typography.Title>
                   <Space wrap size={[6, 6]}>

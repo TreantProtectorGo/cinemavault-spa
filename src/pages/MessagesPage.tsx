@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MessageOutlined, PlusOutlined, ReloadOutlined } from "@ant-design/icons";
-import { Alert, Button, Card, Empty, List, Space, Typography, message } from "antd";
+import { Alert, Button, Card, Empty, Skeleton, Space, Typography, message } from "antd";
 import { getApiErrorMessage } from "../api/client";
 import { getMyMessages, sendMessage } from "../api/messages";
 import { MessageStatusTag } from "../components/MessageStatusTag";
 import { SendMessageModal } from "../components/SendMessageModal";
-import type { Message, MessageCollectionResponse, MessageCreateRequest } from "../types";
+import type { MessageCollectionResponse, MessageCreateRequest } from "../types";
 
 function formatDate(value: string | null) {
   return value ? new Date(value).toLocaleString() : "Not yet";
@@ -76,53 +76,57 @@ export function MessagesPage() {
       </div>
 
       {errorMessage ? (
-        <Alert showIcon type="error" message="Could not load messages" description={errorMessage} />
+        <Alert showIcon type="error" title="Could not load messages" description={errorMessage} />
       ) : null}
 
       <Card className="message-card">
-        <List<Message>
-          dataSource={messages}
-          loading={isLoading}
-          locale={{ emptyText: <Empty description="No messages yet." /> }}
-          renderItem={(item) => (
-            <List.Item>
-              <List.Item.Meta
-                avatar={<MessageOutlined className="message-list-icon" />}
-                title={
+        {isLoading ? (
+          <div className="message-list">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div className="message-list-item" key={index}>
+                <MessageOutlined className="message-list-icon" />
+                <Skeleton active paragraph={{ rows: 3 }} title />
+              </div>
+            ))}
+          </div>
+        ) : messages.length === 0 ? (
+          <Empty description="No messages yet." />
+        ) : (
+          <div className="message-list">
+            {messages.map((item) => (
+              <article className="message-list-item" key={item.id}>
+                <MessageOutlined className="message-list-icon" />
+                <div className="message-stack">
                   <Space wrap>
                     <Typography.Text strong>{item.subject}</Typography.Text>
                     <MessageStatusTag status={item.status} />
                   </Space>
-                }
-                description={
-                  <div className="message-stack">
-                    <Typography.Text type="secondary">
-                      Film:{" "}
-                      {item.film ? (
-                        <Link to={`/films/${item.filmId}`}>{item.film.title}</Link>
-                      ) : (
-                        item.filmId
-                      )}
-                    </Typography.Text>
-                    <Typography.Paragraph>{item.body}</Typography.Paragraph>
-                    <Typography.Text type="secondary">
-                      Created: {formatDate(item.createdAt)}
-                    </Typography.Text>
-                    {item.replyBody ? (
-                      <div className="reply-panel">
-                        <Typography.Text strong>Admin reply</Typography.Text>
-                        <Typography.Paragraph>{item.replyBody}</Typography.Paragraph>
-                        <Typography.Text type="secondary">
-                          Replied: {formatDate(item.repliedAt)}
-                        </Typography.Text>
-                      </div>
-                    ) : null}
-                  </div>
-                }
-              />
-            </List.Item>
-          )}
-        />
+                  <Typography.Text type="secondary">
+                    Film:{" "}
+                    {item.film ? (
+                      <Link to={`/films/${item.filmId}`}>{item.film.title}</Link>
+                    ) : (
+                      item.filmId
+                    )}
+                  </Typography.Text>
+                  <Typography.Paragraph>{item.body}</Typography.Paragraph>
+                  <Typography.Text type="secondary">
+                    Created: {formatDate(item.createdAt)}
+                  </Typography.Text>
+                  {item.replyBody ? (
+                    <div className="reply-panel">
+                      <Typography.Text strong>Admin reply</Typography.Text>
+                      <Typography.Paragraph>{item.replyBody}</Typography.Paragraph>
+                      <Typography.Text type="secondary">
+                        Replied: {formatDate(item.repliedAt)}
+                      </Typography.Text>
+                    </div>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </Card>
 
       <SendMessageModal

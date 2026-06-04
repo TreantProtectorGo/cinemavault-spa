@@ -51,7 +51,7 @@ export function WatchlistPage() {
         <Alert
           showIcon
           type="error"
-          message="Could not load watchlist"
+          title="Could not load watchlist"
           description={`${errorMessage} Please login again if your session expired.`}
         />
       ) : null}

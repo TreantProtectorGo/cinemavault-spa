@@ -19,7 +19,7 @@ export function HomePage() {
       <Alert
         type="info"
         showIcon
-        message="Backend dependency"
+        title="Backend dependency"
         description={`Configured API base URL: ${apiBaseUrl}`}
       />
 

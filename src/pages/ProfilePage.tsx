@@ -104,7 +104,7 @@ export function ProfilePage() {
       </div>
 
       {errorMessage ? (
-        <Alert showIcon type="error" message="Could not load profile" description={errorMessage} />
+        <Alert showIcon type="error" title="Could not load profile" description={errorMessage} />
       ) : null}
 
       <Card className="profile-card">
@@ -118,7 +118,7 @@ export function ProfilePage() {
                 icon={<UserOutlined />}
                 src={avatarUrl}
               />
-              <Space direction="vertical" align="center">
+              <Space orientation="vertical" align="center">
                 <Typography.Text strong>{profile.displayName || profile.username}</Typography.Text>
                 <Tag color={profile.role === "ADMIN" ? "red" : "blue"}>{profile.role}</Tag>
               </Space>

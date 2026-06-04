@@ -70,7 +70,7 @@ function FilmCard({ film }: { film: Film }) {
         </Link>,
       ]}
     >
-      <Space className="film-card-meta" direction="vertical" size={10}>
+      <Space className="film-card-meta" orientation="vertical" size={10}>
         <div>
           <Typography.Title level={3}>{film.title}</Typography.Title>
           <Space wrap size={[6, 6]}>
@@ -253,7 +253,7 @@ export function FilmsPage() {
         <Alert
           showIcon
           type="error"
-          message="Could not load films"
+          title="Could not load films"
           description={errorMessage}
         />
       ) : null}

@@ -375,6 +375,27 @@ a {
   border-color: #e5e7eb;
 }
 
+.message-list {
+  display: grid;
+}
+
+.message-list-item {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.message-list-item:first-child {
+  padding-top: 0;
+}
+
+.message-list-item:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
 .message-list-icon {
   display: grid;
   width: 36px;

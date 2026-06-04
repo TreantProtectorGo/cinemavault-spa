@@ -352,7 +352,7 @@ export function FilmDetailPage() {
           <DetailPoster film={film} />
 
           <div className="film-detail-copy">
-            <Space direction="vertical" size={16}>
+            <Space orientation="vertical" size={16}>
               <div className="page-heading">
                 <Typography.Title level={1}>{film.title}</Typography.Title>
                 <Space wrap size={[8, 8]}>
@@ -373,7 +373,7 @@ export function FilmDetailPage() {
                 <Alert
                   showIcon
                   type="info"
-                  message="Plot summary is not available for this film yet."
+                  title="Plot summary is not available for this film yet."
                 />
               )}
 
@@ -431,7 +431,7 @@ export function FilmDetailPage() {
                 <Alert
                   showIcon
                   type="info"
-                  message="Login required for tracking"
+                  title="Login required for tracking"
                   description="Sign in to add favourites, build your watchlist, or mark films as watched."
                   action={
                     <Link to="/login">

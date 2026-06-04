@@ -100,7 +100,7 @@ export function AdminMessagesPage() {
       dataIndex: "subject",
       key: "subject",
       render: (_, item) => (
-        <Space direction="vertical" size={4}>
+        <Space orientation="vertical" size={4}>
           <Typography.Text strong>{item.subject}</Typography.Text>
           <Typography.Text type="secondary">
             From {item.sender?.username ?? item.userId}
@@ -193,7 +193,7 @@ export function AdminMessagesPage() {
         <Alert
           showIcon
           type="error"
-          message="Could not load admin messages"
+          title="Could not load admin messages"
           description={errorMessage}
         />
       ) : null}

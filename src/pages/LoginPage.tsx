@@ -57,7 +57,7 @@ export function LoginPage() {
         <Alert
           type="warning"
           showIcon
-          message="Login required"
+          title="Login required"
           description="Please sign in before continuing to that page."
         />
       ) : null}
