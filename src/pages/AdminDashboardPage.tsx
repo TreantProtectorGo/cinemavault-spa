@@ -24,11 +24,11 @@ import type {
   OmdbImportRequest,
 } from "../types";
 
-type ListingMode = "live" | "archived";
+type ListingMode = "all" | "live" | "draft";
 
 export function AdminDashboardPage() {
   const [messageApi, contextHolder] = message.useMessage();
-  const [listingMode, setListingMode] = useState<ListingMode>("live");
+  const [listingMode, setListingMode] = useState<ListingMode>("all");
   const [filmsResponse, setFilmsResponse] = useState<FilmListResponse | null>(null);
   const [selectedFilm, setSelectedFilm] = useState<Film | null>(null);
   const [isFilmModalOpen, setIsFilmModalOpen] = useState(false);
@@ -43,7 +43,7 @@ export function AdminDashboardPage() {
 
     try {
       const result = await getFilms({
-        isLive: listingMode === "live",
+        ...(listingMode === "all" ? {} : { isLive: listingMode === "live" }),
         limit: 100,
         order: "desc",
         page: 1,
@@ -130,7 +130,7 @@ export function AdminDashboardPage() {
       const film = await importFilmFromOmdb(values);
       messageApi.success(`Imported ${film.title}.`);
       setIsOmdbModalOpen(false);
-      setListingMode("live");
+      setListingMode("all");
       await loadFilms();
     } catch (error) {
       messageApi.error(getApiErrorMessage(error));
@@ -177,8 +177,9 @@ export function AdminDashboardPage() {
         extra={
           <Segmented<ListingMode>
             options={[
+              { label: "All", value: "all" },
               { label: "Live", value: "live" },
-              { label: "Draft", value: "archived" },
+              { label: "Draft", value: "draft" },
             ]}
             value={listingMode}
             onChange={setListingMode}
