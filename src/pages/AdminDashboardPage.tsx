@@ -42,13 +42,39 @@ export function AdminDashboardPage() {
     setErrorMessage(null);
 
     try {
-      const result = await getFilms({
-        ...(listingMode === "all" ? {} : { isLive: listingMode === "live" }),
+      const baseQuery = {
         limit: 100,
-        order: "desc",
+        order: "desc" as const,
         page: 1,
-        sortBy: "updatedAt",
-      });
+        sortBy: "updatedAt" as const,
+      };
+      const result =
+        listingMode === "all"
+          ? await Promise.all([
+              getFilms({ ...baseQuery, isLive: true }),
+              getFilms({ ...baseQuery, isLive: false }),
+            ]).then(([liveFilms, draftFilms]) => {
+              const data = [...liveFilms.data, ...draftFilms.data].sort(
+                (firstFilm, secondFilm) =>
+                  new Date(secondFilm.updatedAt).getTime() -
+                  new Date(firstFilm.updatedAt).getTime(),
+              );
+
+              return {
+                data,
+                pagination: {
+                  page: 1,
+                  limit: data.length || baseQuery.limit,
+                  total: data.length,
+                  totalPages: 1,
+                },
+                links: liveFilms.links,
+              };
+            })
+          : await getFilms({
+              ...baseQuery,
+              isLive: listingMode === "live",
+            });
 
       setFilmsResponse(result);
     } catch (error) {
@@ -100,7 +126,7 @@ export function AdminDashboardPage() {
 
     try {
       await deleteFilm(film.id);
-      messageApi.success("Film archived.");
+      messageApi.success("Film removed from admin catalogue.");
       await loadFilms();
     } catch (error) {
       messageApi.error(getApiErrorMessage(error));

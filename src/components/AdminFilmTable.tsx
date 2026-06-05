@@ -128,7 +128,7 @@ export function AdminFilmTable({
           </Button>
           <Popconfirm
             title="Delete film?"
-            description="This will archive the film in the backend."
+            description="This will remove the film from the admin catalogue. Related user data will be preserved."
             okText="Delete"
             okButtonProps={{ danger: true }}
             onConfirm={() => onDelete(film)}

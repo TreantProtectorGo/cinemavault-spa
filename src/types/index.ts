@@ -62,6 +62,7 @@ export type Film = {
   imdbId: string | null;
   omdbMetadataJson: string | null;
   isLive: boolean;
+  deletedAt: string | null;
   createdAt: string;
   updatedAt: string;
   links: HateoasLinks;

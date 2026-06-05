@@ -238,7 +238,7 @@ Current admin UI behaviour:
 - Admin users can create films manually.
 - Admin users can edit existing films.
 - Admin users can toggle films between Live and Draft. Public browsing defaults to live films only, so incomplete draft records stay hidden from public users.
-- Admin users can archive films via delete action.
+- Admin users can remove films from the admin catalogue via the Delete action. The backend performs a soft delete and preserves related user data.
 - Admin users can import films from OMDB by IMDb ID or title.
 - Admin labels show whether each film is OMDB imported or manually entered.
 - Request failures show clean Ant Design messages.
