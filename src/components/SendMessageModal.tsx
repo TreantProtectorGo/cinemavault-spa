@@ -1,9 +1,11 @@
 import { useEffect } from "react";
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, Modal, Select, Typography } from "antd";
 import type { Film, MessageCreateRequest } from "../types";
 
 type SendMessageModalProps = {
   film?: Film;
+  filmOptions?: Film[];
+  filmsLoading?: boolean;
   open: boolean;
   submitting: boolean;
   onCancel: () => void;
@@ -14,6 +16,8 @@ type SendMessageFormValues = MessageCreateRequest;
 
 export function SendMessageModal({
   film,
+  filmOptions = [],
+  filmsLoading = false,
   onCancel,
   onSubmit,
   open,
@@ -35,6 +39,15 @@ export function SendMessageModal({
     }
   }, [film, form, open]);
 
+  function handleFilmChange(filmId: string) {
+    const selectedFilm = filmOptions.find((option) => option.id === filmId);
+    const currentSubject = form.getFieldValue("subject");
+
+    if (selectedFilm && !currentSubject) {
+      form.setFieldValue("subject", `Question about ${selectedFilm.title}`);
+    }
+  }
+
   async function handleFinish(values: SendMessageFormValues) {
     await onSubmit(values);
     form.resetFields();
@@ -49,13 +62,34 @@ export function SendMessageModal({
       onCancel={onCancel}
     >
       <Form form={form} layout="vertical" requiredMark={false} onFinish={handleFinish}>
-        <Form.Item
-          label="Film ID"
-          name="filmId"
-          rules={[{ required: true, message: "Film ID is required." }]}
-        >
-          <Input disabled={Boolean(film)} placeholder="Film id" />
-        </Form.Item>
+        {film ? (
+          <>
+            <Form.Item hidden name="filmId">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Film">
+              <Typography.Text strong>{film.title}</Typography.Text>
+            </Form.Item>
+          </>
+        ) : (
+          <Form.Item
+            label="Film"
+            name="filmId"
+            rules={[{ required: true, message: "Choose a film." }]}
+          >
+            <Select
+              showSearch
+              loading={filmsLoading}
+              optionFilterProp="label"
+              options={filmOptions.map((option) => ({
+                label: option.year ? `${option.title} (${option.year})` : option.title,
+                value: option.id,
+              }))}
+              placeholder="Choose a film"
+              onChange={handleFilmChange}
+            />
+          </Form.Item>
+        )}
         <Form.Item
           label="Subject"
           name="subject"

@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import { MessageOutlined, PlusOutlined, ReloadOutlined } from "@ant-design/icons";
 import { Alert, Button, Card, Empty, Skeleton, Space, Typography, message } from "antd";
 import { getApiErrorMessage } from "../api/client";
+import { getFilms } from "../api/films";
 import { getMyMessages, sendMessage } from "../api/messages";
 import { MessageStatusTag } from "../components/MessageStatusTag";
 import { SendMessageModal } from "../components/SendMessageModal";
-import type { MessageCollectionResponse, MessageCreateRequest } from "../types";
+import type { Film, MessageCollectionResponse, MessageCreateRequest } from "../types";
 
 function formatDate(value: string | null) {
   return value ? new Date(value).toLocaleString() : "Not yet";
@@ -16,8 +17,10 @@ export function MessagesPage() {
   const [messageApi, contextHolder] = message.useMessage();
   const [messagesResponse, setMessagesResponse] =
     useState<MessageCollectionResponse | null>(null);
+  const [filmOptions, setFilmOptions] = useState<Film[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isFilmsLoading, setIsFilmsLoading] = useState(false);
   const [isSendModalOpen, setIsSendModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -39,6 +42,35 @@ export function MessagesPage() {
   useEffect(() => {
     void loadMessages();
   }, [loadMessages]);
+
+  const loadFilmOptions = useCallback(async () => {
+    if (filmOptions.length > 0) {
+      return;
+    }
+
+    setIsFilmsLoading(true);
+
+    try {
+      const result = await getFilms({
+        isLive: true,
+        limit: 100,
+        order: "asc",
+        page: 1,
+        sortBy: "title",
+      });
+      setFilmOptions(result.data);
+    } catch (error) {
+      messageApi.error(`${getApiErrorMessage(error)} Could not load films for message form.`);
+    } finally {
+      setIsFilmsLoading(false);
+    }
+  }, [filmOptions.length, messageApi]);
+
+  useEffect(() => {
+    if (isSendModalOpen) {
+      void loadFilmOptions();
+    }
+  }, [isSendModalOpen, loadFilmOptions]);
 
   async function handleSendMessage(values: MessageCreateRequest) {
     setIsSubmitting(true);
@@ -68,7 +100,13 @@ export function MessagesPage() {
           <Button icon={<ReloadOutlined />} onClick={() => void loadMessages()}>
             Refresh
           </Button>
-          <Button icon={<PlusOutlined />} type="primary" onClick={() => setIsSendModalOpen(true)}>
+          <Button
+            icon={<PlusOutlined />}
+            type="primary"
+            onClick={() => {
+              setIsSendModalOpen(true);
+            }}
+          >
             New message
           </Button>
         </Space>
@@ -129,6 +167,8 @@ export function MessagesPage() {
       </Card>
 
       <SendMessageModal
+        filmOptions={filmOptions}
+        filmsLoading={isFilmsLoading}
         open={isSendModalOpen}
         submitting={isSubmitting}
         onCancel={() => setIsSendModalOpen(false)}
